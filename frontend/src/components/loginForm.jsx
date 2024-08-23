@@ -1,17 +1,48 @@
 /* eslint-disable functional/no-expression-statement */
-import React from 'react';
+/* eslint-disable functional/no-try-statement */
+import React, { useRef, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useFormik } from 'formik';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { setUserInfo, setAuthorized } from '../slices/userSlice';
 
 const LoginForm = () => {
+  // const [users, setUser] = useState([]);
+  const [authFailed, setAuthFailed] = useState(false);
+  const inputref = useRef(null);
+  const dispatch = useDispatch();
+
+  // const location = useLocation();
+  const navigate = useNavigate();
+
+  // const currentLocation = location.pathname;
+  // console.log(location);
+  useEffect(() => {
+    inputref.current.focus();
+  }, []);
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
-    onSubmit: (values) => {
-      console.log(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      localStorage.clear();
+      setAuthFailed(false);
+      try {
+        const response = await axios.post('/api/v1/login', values);
+        localStorage.setItem(response.data.username, response.data.token);
+        dispatch(setUserInfo(response.data));
+        dispatch(setAuthorized(true));
+        // setUser([...users, response.data]);
+        navigate('/');
+      } catch (error) {
+        setAuthFailed(true);
+        dispatch(setAuthorized(false));
+        console.error(error);
+      }
     },
   });
 
@@ -23,6 +54,7 @@ const LoginForm = () => {
       <h1 className="text-center mb-4">Войти</h1>
       <Form.Group className="mb-3 form-floating">
         <Form.Control
+          ref={inputref}
           name="username"
           autoComplete="username"
           required
@@ -30,6 +62,7 @@ const LoginForm = () => {
           placeholder="Ваш ник"
           onChange={formik.handleChange}
           value={formik.values.username}
+          isInvalid={authFailed}
         />
         <Form.Label htmlFor="username">Ваш ник</Form.Label>
       </Form.Group>
@@ -43,7 +76,11 @@ const LoginForm = () => {
           id="password"
           onChange={formik.handleChange}
           value={formik.values.password}
+          isInvalid={authFailed}
         />
+        <Form.Control.Feedback type="invalid" tooltip>
+          Неверные имя пользователя или пароль
+        </Form.Control.Feedback>
         <Form.Label htmlFor="password">Пароль</Form.Label>
       </Form.Group>
       <Button type="submit" variant="outline-primary" className="w-100 mb-3">
