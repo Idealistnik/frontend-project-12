@@ -1,5 +1,6 @@
 /* eslint-disable functional/no-expression-statement */
 /* eslint-disable functional/no-try-statement */
+
 import React, { useRef, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -7,40 +8,37 @@ import Button from 'react-bootstrap/Button';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { setUserInfo, setAuthorized } from '../slices/userSlice';
+import { setUserInfo, setLoggedIn, setUserInfoToStorage } from '../slices/userSlice';
 
 const LoginForm = () => {
   // const [users, setUser] = useState([]);
   const [authFailed, setAuthFailed] = useState(false);
   const inputref = useRef(null);
   const dispatch = useDispatch();
-
-  // const location = useLocation();
   const navigate = useNavigate();
-
+  // const location = useLocation();
   // const currentLocation = location.pathname;
   // console.log(location);
   useEffect(() => {
     inputref.current.focus();
   }, []);
+
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
     onSubmit: async (values) => {
-      localStorage.clear();
       setAuthFailed(false);
       try {
         const response = await axios.post('/api/v1/login', values);
-        localStorage.setItem(response.data.username, response.data.token);
+        dispatch(setUserInfoToStorage(response.data));
         dispatch(setUserInfo(response.data));
-        dispatch(setAuthorized(true));
-        // setUser([...users, response.data]);
+        dispatch(setLoggedIn());
         navigate('/');
       } catch (error) {
         setAuthFailed(true);
-        dispatch(setAuthorized(false));
+        inputref.current.select();
         console.error(error);
       }
     },
