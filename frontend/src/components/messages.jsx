@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useFormik } from 'formik';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -27,7 +27,7 @@ const Messages = () => {
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentChannelId = useSelector(getPressedChannelId);
   const channelMessagesList = messagesList.filter(
-    (message) => +message.channelId === currentChannelId
+    (message) => +message.channelId === currentChannelId,
   );
   const messagesCount = _.size(channelMessagesList);
 
