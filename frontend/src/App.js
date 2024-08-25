@@ -6,7 +6,6 @@ import {
   Routes,
   Route,
   Navigate,
-  useLocation,
 }
   from 'react-router-dom';
 import LoginPage from './pages/login_Page';
@@ -16,9 +15,9 @@ import { selectorLoggedIn } from './slices/userSlice';
 
 const MainRoute = ({ children }) => {
   const isLoggedIn = useSelector(selectorLoggedIn);
-  const location = useLocation();
+
   return (
-    isLoggedIn ? children : <Navigate to="/login" state={{ from: location }} />
+    isLoggedIn ? children : <Navigate to="/login" />
   );
 };
 

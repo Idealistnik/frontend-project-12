@@ -10,7 +10,6 @@ import {
   setLoggedOut,
   removeUserInfo,
 } from '../slices/userSlice';
-import { removeChannels } from '../slices/channelSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -20,9 +19,8 @@ const Header = () => {
   const classes = isLoggedIn ? 'd-block' : 'd-none';
   const handleLogOut = () => {
     dispatch(setLoggedOut());
-    // localStorage.clear();
     dispatch(removeUserInfo());
-    dispatch(removeChannels());
+    // dispatch(removeChannels());
     navigate('/login');
   };
 
