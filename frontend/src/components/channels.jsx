@@ -11,21 +11,19 @@ import { PlusSquare } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
 import { setChannels, channelsSelectors } from '../slices/channelSlice';
-import { getUserInfo } from '../slices/userSlice';
+import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
 import { setPressedChannel, getPressedChannelId } from '../slices/uiSlice';
 
 const Channels = () => {
+  const isLoggedIn = useSelector(selectorLoggedIn);
   const channelList = useSelector(channelsSelectors.selectAll);
   const [currentToken] = useSelector(getUserInfo);
   const currentChannelId = useSelector(getPressedChannelId);
-
-  // const defaultIdGeneralChat = 1;
-  // const [active, setActive] = useState(defaultIdGeneralChat);
   const dispatch = useDispatch();
   // localStorage.clear();
 
   useEffect(() => {
-    if (localStorage.length > 0) {
+    if (isLoggedIn) {
       const getChannels = async () => {
         const response = await axios.get('/api/v1/channels', {
           headers: {
@@ -36,7 +34,7 @@ const Channels = () => {
       };
       getChannels().then((data) => dispatch(setChannels(data)));
     }
-  }, [dispatch, channelList, currentToken]);
+  }, [dispatch, channelList, currentToken, isLoggedIn]);
 
   const handleClick = (id) => {
     dispatch(setPressedChannel(+id));

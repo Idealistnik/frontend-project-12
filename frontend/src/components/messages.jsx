@@ -5,6 +5,7 @@
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { Spinner } from 'react-bootstrap';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';
@@ -12,7 +13,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
-import { getUserInfo } from '../slices/userSlice';
+import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
 // import ToggleButton from 'react-bootstrap/ToggleButton';
 // import ButtonGroup from 'react-bootstrap/ButtonGroup';
 // import { setChannels, channelsSelectors } from '../slices/channelSlice';
@@ -20,12 +21,16 @@ import {
   setMessages,
   messagesSelectors,
   addMessage,
+  fetchMessages,
 } from '../slices/messagesSlice';
 import { getPressedChannelId } from '../slices/uiSlice';
 
 const Messages = () => {
+  const isLoggedIn = useSelector(selectorLoggedIn);
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentChannelId = useSelector(getPressedChannelId);
+  const isLoading = useSelector((state) => state.messages.loadingStatus);
+  console.log(isLoading);
   const channelMessagesList = messagesList.filter(
     (message) => +message.channelId === currentChannelId,
   );
@@ -64,18 +69,10 @@ const Messages = () => {
   });
 
   useEffect(() => {
-    if (localStorage.length > 0) {
-      const getMessages = async () => {
-        const response = await axios.get('/api/v1/messages', {
-          headers: {
-            Authorization: `Bearer ${currentToken}`,
-          },
-        });
-        return response.data;
-      };
-      getMessages().then((data) => dispatch(setMessages(data)));
+    if (isLoggedIn) {
+      dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
     }
-  }, [dispatch, currentToken]);
+  }, [dispatch, currentToken, isLoggedIn]);
 
   const vdom = (
     <div className="col p-0 h-100">
@@ -86,12 +83,26 @@ const Messages = () => {
           </p>
           <span className="text-muted">{messagesCount} сообщений</span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5 ">
-          {channelMessagesList.map(({ body, username, id }) => (
-            <div key={id} className="text-break mb-2">
-              <b>{username}</b>: {body}
+        <div
+          id="messages-box"
+          className="chat-messages overflow-auto px-5 d-flex flex-column"
+        >
+          {isLoading === 'loading' ? (
+            <div
+              className="d-flex justify-content-center align-items-center w-100"
+              style={{ flexGrow: 1 }}
+            >
+              <Spinner variant="secondary" animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
             </div>
-          ))}
+          ) : (
+            channelMessagesList.map(({ body, username, id }) => (
+              <div key={id} className="text-break mb-2">
+                <b>{username}</b>: {body}
+              </div>
+            ))
+          )}
         </div>
         <div className="mt-auto px-5 py-3">
           <Form
@@ -133,3 +144,12 @@ const Messages = () => {
 };
 
 export default Messages;
+// const getMessages = async () => {
+//   const response = await axios.get('/api/v1/messages', {
+//     headers: {
+//       Authorization: `Bearer ${currentToken}`,
+//     },
+//   });
+//   return response.data;
+// };
+// getMessages().then((data) => dispatch(setMessages(data)));
