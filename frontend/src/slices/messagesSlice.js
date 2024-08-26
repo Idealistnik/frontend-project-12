@@ -16,14 +16,27 @@ export const fetchMessages = createAsyncThunk(
     return response.data;
   },
 );
+// const socket = io('http://localhost:3000');
+
+// export const fetchMessages1 = createAsyncThunk(
+//   'messages/fetchMessages1',
+//   async () => {
+//     socket.on('newMessage', (payload) => {
+//       console.log(payload); // => { body: "new message", channelId: 7, id: 8, username: "admin" }
+//     });
+//   },
+// );
 
 // По умолчанию: { ids: [], entities: {} }
-const initialState = messagesAdapter.getInitialState({ loadingStatus: 'idle', error: null });
+const initialState = messagesAdapter.getInitialState({ socket: null, loadingStatus: 'idle', error: null });
 
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
+    addSocket: (state, action) => {
+      state.socket = action.payload;
+    },
     addMessage: messagesAdapter.addOne,
     setMessages: messagesAdapter.addMany,
     removeMessages: messagesAdapter.removeAll,
@@ -46,6 +59,11 @@ const messagesSlice = createSlice({
         state.loadingStatus = 'failed';
         state.error = action.error;
       });
+    // .addCase(fetchMessages1.fulfilled, (state, action) => {
+    //   messagesAdapter.addMany(state, action);
+    //   state.loadingStatus = 'idle';
+    //   state.error = null;
+    // });
   },
 });
 
@@ -54,6 +72,7 @@ export const {
   setMessages,
   removeMessages,
   removeMessage,
+  addSocket,
 } = messagesSlice.actions;
 export const messagesSelectors = messagesAdapter.getSelectors((state) => state.messages);
 export default messagesSlice;

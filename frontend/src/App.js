@@ -21,11 +21,28 @@ const MainRoute = ({ children }) => {
   );
 };
 
+const LoginRoute = ({ children }) => {
+  const isLoggedIn = useSelector(selectorLoggedIn);
+
+  return (
+    isLoggedIn ? <Navigate to="/" /> : children
+  );
+};
+
 const App = () => (
   <BrowserRouter>
     <Routes>
 
-      <Route path="/login" element={<LoginPage />} />
+      {/* <Route path="/login" element={<LoginPage />} /> */}
+
+      <Route
+        path="/login"
+        element={(
+          <LoginRoute>
+            <LoginPage />
+          </LoginRoute>
+        )}
+      />
 
       <Route
         path="/"

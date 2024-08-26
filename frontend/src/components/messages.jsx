@@ -13,6 +13,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
+import io from 'socket.io-client';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
 // import ToggleButton from 'react-bootstrap/ToggleButton';
 // import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -22,6 +23,7 @@ import {
   messagesSelectors,
   addMessage,
   fetchMessages,
+  addSocket,
 } from '../slices/messagesSlice';
 import { getPressedChannelId } from '../slices/uiSlice';
 
@@ -73,6 +75,29 @@ const Messages = () => {
       dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
     }
   }, [dispatch, currentToken, isLoggedIn]);
+
+  // const promisify = (asyncFn) => (...args) => {
+  //   const promise = new Promise((resolve, reject) => {
+  //     asyncFn(...args, (err, data) => (err ? reject(err) : resolve(data)));
+  //   });
+  //   return promise;
+  // };
+
+  useEffect(() => {
+    const socket = io('http://localhost:3000');
+    // const func = socket.on;
+    // const promisifySocket = promisify(func);
+    // promisifySocket('newMessage', (payload) => {
+    //   dispatch(addMessage(payload));
+    // });
+    dispatch(addSocket(socket));
+    socket.on('newMessage', (payload) => {
+      dispatch(addMessage(payload));
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [dispatch]);
 
   const vdom = (
     <div className="col p-0 h-100">
