@@ -3,6 +3,7 @@
 /* eslint-disable functional/no-try-statement */
 import axios from 'axios';
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
+import { removeChannel } from './channelSlice';
 
 const messagesAdapter = createEntityAdapter();
 export const fetchMessages = createAsyncThunk(
@@ -17,15 +18,6 @@ export const fetchMessages = createAsyncThunk(
   },
 );
 // const socket = io('http://localhost:3000');
-
-// export const fetchMessages1 = createAsyncThunk(
-//   'messages/fetchMessages1',
-//   async () => {
-//     socket.on('newMessage', (payload) => {
-//       console.log(payload); // => { body: "new message", channelId: 7, id: 8, username: "admin" }
-//     });
-//   },
-// );
 
 // По умолчанию: { ids: [], entities: {} }
 const initialState = messagesAdapter.getInitialState({ socket: null, loadingStatus: 'idle', error: null });
@@ -58,12 +50,15 @@ const messagesSlice = createSlice({
       .addCase(fetchMessages.rejected, (state, action) => {
         state.loadingStatus = 'failed';
         state.error = action.error;
+      })
+      .addCase(removeChannel, (state, action) => {
+        const idToRemove = action.payload;
+        console.log(typeof idToRemove);
+        const restEntities = Object.values(state.entities)
+          .filter(({ channelId }) => channelId !== +idToRemove);
+        console.log(restEntities.values);
+        messagesAdapter.setAll(state, restEntities);
       });
-    // .addCase(fetchMessages1.fulfilled, (state, action) => {
-    //   messagesAdapter.addMany(state, action);
-    //   state.loadingStatus = 'idle';
-    //   state.error = null;
-    // });
   },
 });
 

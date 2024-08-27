@@ -25,7 +25,8 @@ import {
   fetchMessages,
   addSocket,
 } from '../slices/messagesSlice';
-import { getPressedChannelId } from '../slices/uiSlice';
+import { addChannel, removeChannel } from '../slices/channelSlice';
+import { getPressedChannelId, setPressedChannel } from '../slices/uiSlice';
 
 const Messages = () => {
   const isLoggedIn = useSelector(selectorLoggedIn);
@@ -33,9 +34,8 @@ const Messages = () => {
   const currentChannelId = useSelector(getPressedChannelId);
   const isLoading = useSelector((state) => state.messages.loadingStatus);
   console.log(isLoading);
-  const channelMessagesList = messagesList.filter(
-    (message) => +message.channelId === currentChannelId,
-  );
+  const channelMessagesList = messagesList
+    .filter((message) => +message.channelId === currentChannelId);
   const messagesCount = _.size(channelMessagesList);
 
   const [currentToken, currentUser] = useSelector(getUserInfo);
@@ -75,25 +75,21 @@ const Messages = () => {
       dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
     }
   }, [dispatch, currentToken, isLoggedIn]);
-
-  // const promisify = (asyncFn) => (...args) => {
-  //   const promise = new Promise((resolve, reject) => {
-  //     asyncFn(...args, (err, data) => (err ? reject(err) : resolve(data)));
-  //   });
-  //   return promise;
-  // };
-
+  const defaultChannelId = 1;
   useEffect(() => {
     const socket = io('http://localhost:3000');
-    // const func = socket.on;
-    // const promisifySocket = promisify(func);
-    // promisifySocket('newMessage', (payload) => {
-    //   dispatch(addMessage(payload));
-    // });
     dispatch(addSocket(socket));
     socket.on('newMessage', (payload) => {
       dispatch(addMessage(payload));
     });
+    socket.on('newChannel', (payload) => {
+      dispatch(addChannel(payload));
+    });
+    socket.on('removeChannel', (payload) => {
+      dispatch(removeChannel(payload.id));
+      dispatch(setPressedChannel(defaultChannelId));
+    });
+
     return () => {
       socket.disconnect();
     };

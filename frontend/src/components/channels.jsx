@@ -6,13 +6,24 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { PlusSquare } from 'react-bootstrap-icons';
+import Dropdown from 'react-bootstrap/Dropdown';
 // import ToggleButton from 'react-bootstrap/ToggleButton';
 // import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
-import { setChannels, channelsSelectors } from '../slices/channelSlice';
+import {
+  setChannels,
+  channelsSelectors,
+  setChannelToRemove,
+} from '../slices/channelSlice';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
-import { setPressedChannel, getPressedChannelId } from '../slices/uiSlice';
+import {
+  setPressedChannel,
+  getPressedChannelId,
+  setPressedAddChannel,
+  setPressedRemoveChannel,
+} from '../slices/uiSlice';
 
 const Channels = () => {
   const isLoggedIn = useSelector(selectorLoggedIn);
@@ -40,11 +51,24 @@ const Channels = () => {
     dispatch(setPressedChannel(+id));
   };
 
+  const handleClickAddChannel = () => {
+    dispatch(setPressedAddChannel(true));
+  };
+
+  const handleRemoveChannel = (currentId) => {
+    dispatch(setPressedRemoveChannel(true));
+    dispatch(setChannelToRemove(+currentId));
+  };
+
   const vdom = (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>Каналы</b>
-        <Button variant="" className="text-primary btn-group-vertical p-0">
+        <Button
+          variant=""
+          className="text-primary btn-group-vertical p-0"
+          onClick={handleClickAddChannel}
+        >
           <PlusSquare />
           <span className="visually-hidden">+</span>
         </Button>
@@ -58,14 +82,40 @@ const Channels = () => {
       >
         {channelList.map(({ id, name }) => (
           <Nav.Item as="li" key={id} className="w-100">
-            <Button
-              variant={currentChannelId === +id ? 'secondary' : ''}
-              onClick={() => handleClick(id)}
-              className="w-100 rounded-0 text-start"
-            >
-              <span className="me-1">#</span>
-              {name}
-            </Button>
+            <Dropdown as={ButtonGroup} className="d-flex">
+              <Button
+                variant={currentChannelId === +id ? 'secondary' : ''}
+                onClick={() => handleClick(id)}
+                className="w-100 rounded-0 text-start"
+              >
+                <span className="me-1">#</span>
+                {name}
+              </Button>
+
+              {+id === 1 || +id === 2 ? null : (
+                <>
+                  <Dropdown.Toggle
+                    split
+                    variant={currentChannelId === +id ? 'secondary' : ''}
+                    id="dropdown-split-basic"
+                    className="flex-grow-0"
+                  >
+                    <span className="visually-hidden">Управление каналом</span>
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={() => handleRemoveChannel(id)}
+                    >
+                      Удалить
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      Переименовать
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </>
+              )}
+            </Dropdown>
           </Nav.Item>
         ))}
       </Nav>
