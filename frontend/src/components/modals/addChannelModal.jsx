@@ -9,9 +9,13 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import * as yup from 'yup';
-
-import { getPressedAddChannel, setPressedAddChannel, setPressedChannel } from '../../slices/uiSlice';
+import setLocale, { getSchemaChannels } from '../../validation/validation';
+import routes from '../../routes/routes';
+import {
+  getPressedAddChannel,
+  setPressedAddChannel,
+  setPressedChannel,
+} from '../../slices/uiSlice';
 import { getUserInfo } from '../../slices/userSlice';
 import { channelsSelectors, addChannel } from '../../slices/channelSlice';
 
@@ -20,29 +24,13 @@ const AddChannelModal = () => {
   const isPressedAddChannel = useSelector(getPressedAddChannel);
   const channels = useSelector(channelsSelectors.selectAll);
   const channelsNames = channels.map((channel) => channel.name);
-  // console.log(channels);
-
   const [currentToken] = useSelector(getUserInfo);
   const handleClickCloseModal = () => {
+    // formik.resetForm();
     dispatch(setPressedAddChannel(false));
   };
-
-  yup.setLocale({
-    mixed: {
-      required: 'Обязательное поле',
-      notOneOf: 'Должно быть уникальным',
-    },
-    string: {
-      min: 'От 3 до 20 символов',
-      max: 'От 3 до 20 символов',
-    },
-  });
-
-  const schema = yup.object().shape({
-    inputValue: yup.string().required().min(3).max(20)
-      .notOneOf(channelsNames),
-  });
-
+  setLocale();
+  const schema = getSchemaChannels(channelsNames);
   const formik = useFormik({
     initialValues: {
       inputValue: '',
@@ -52,7 +40,7 @@ const AddChannelModal = () => {
       const currentValue = values.inputValue;
       const newChannel = { name: currentValue };
       try {
-        const response = await axios.post('/api/v1/channels', newChannel, {
+        const response = await axios.post(routes.channels(), newChannel, {
           headers: {
             Authorization: `Bearer ${currentToken}`,
           },
@@ -60,7 +48,7 @@ const AddChannelModal = () => {
         dispatch(addChannel(response.data));
         dispatch(setPressedChannel(+response.data.id));
         resetForm();
-        handleClickCloseModal(); // Закрываем модальное окно после успешной отправки формы
+        handleClickCloseModal();
       } catch (e) {
         console.error(e);
       }
@@ -74,11 +62,7 @@ const AddChannelModal = () => {
   }, [isPressedAddChannel]);
 
   return (
-    <Modal
-      show={isPressedAddChannel}
-      onHide={handleClickCloseModal}
-      className="modal-dialog-centered"
-    >
+    <Modal show={isPressedAddChannel} onHide={handleClickCloseModal} centered>
       <Modal.Header closeButton>
         <Modal.Title>Добавить канал</Modal.Title>
       </Modal.Header>
@@ -117,7 +101,7 @@ const AddChannelModal = () => {
           className="me-2"
           type="submit"
           variant="primary"
-          onClick={formik.handleSubmit}
+          onClick={formik.handleSubmit} // если убрать то не будет сабмитить почему-то
         >
           Отправить
         </Button>

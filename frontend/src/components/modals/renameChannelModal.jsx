@@ -2,62 +2,76 @@
 /* eslint-disable functional/no-try-statement */
 /* eslint-disable functional/no-conditional-statement */
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { useFormik } from 'formik';
 import {
-  setPressedRemoveChannel,
-  getPressedRemoveChannel,
-  setPressedChannel,
+  setPressedRenameChannel,
+  getPressedRenameChannel,
 } from '../../slices/uiSlice';
+import setLocale, { getSchemaChannels } from '../../validation/validation';
+import routes from '../../routes/routes';
 import {
-  removeChannel,
-  getChannelIdToRemove,
-  setChannelToRemove,
+  renameChannel,
+  getChannelIdToRename,
+  setChannelToRename,
+  channelsSelectors,
 } from '../../slices/channelSlice';
 import { getUserInfo } from '../../slices/userSlice';
 
 const RenameChannelModal = () => {
+  const inputRenameRef = useRef();
   const dispatch = useDispatch();
-  const isPressedRemoveChannel = useSelector(getPressedRemoveChannel);
-  const idToRemove = useSelector(getChannelIdToRemove);
+  const isPressedRenameChannel = useSelector(getPressedRenameChannel);
+  const idToRename = useSelector(getChannelIdToRename);
+  const channels = useSelector(channelsSelectors.selectAll);
+  const channelsNames = channels.map((channel) => channel.name);
+  const currentChannel = useSelector((state) => {
+    if (idToRename !== null) {
+      return channelsSelectors.selectById(state, idToRename);
+    }
+    return null;
+  });
+  const channelName = currentChannel ? currentChannel.name : '';
   const [currentToken] = useSelector(getUserInfo);
 
   const handleClickCloseModal = () => {
-    dispatch(setPressedRemoveChannel(false));
+    dispatch(setPressedRenameChannel(false));
+    dispatch(setChannelToRename(null));
   };
-  const defaultChannelId = 1;
-  const handleRemoveChannel = async (id) => {
-    const respose = await axios.delete(`/api/v1/channels/${id}`, {
-      headers: {
-        Authorization: `Bearer ${currentToken}`,
-      },
-    });
-    const removeId = respose.data.id;
-    dispatch(removeChannel(removeId));
-    dispatch(setPressedChannel(defaultChannelId));
-    dispatch(setChannelToRemove(null));
-    dispatch(setPressedRemoveChannel(false));
-  };
-
+  setLocale();
+  const schema = getSchemaChannels(channelsNames);
   const formik = useFormik({
     initialValues: {
-      inputValue: '',
+      inputValue: channelName,
     },
+    validationSchema: schema,
+    enableReinitialize: true, // переинициализируем если изменился channelName
     onSubmit: async (values, { resetForm }) => {
       const currentValue = values.inputValue;
       const editedChannel = { name: currentValue };
       try {
-        const response = await axios.post('/api/v1/channels', editedChannel, {
-          headers: {
-            Authorization: `Bearer ${currentToken}`,
+        const response = await axios.patch(
+          routes.editChannel(idToRename),
+          editedChannel,
+          {
+            headers: {
+              Authorization: `Bearer ${currentToken}`,
+            },
           },
-        });
-        dispatch(addChannel(response.data));
-        dispatch(setPressedChannel(+response.data.id));
+        );
+        const currentId = response.data.id;
+        console.log(response.data);
+        const currentName = response.data.name;
+        dispatch(
+          renameChannel({ id: currentId, changes: { name: currentName } }),
+        );
+        dispatch(setChannelToRename(null));
         resetForm();
+        dispatch(setPressedRenameChannel(false));
         handleClickCloseModal(); // Закрываем модальное окно после успешной отправки формы
       } catch (e) {
         console.error(e);
@@ -65,37 +79,69 @@ const RenameChannelModal = () => {
     },
   });
 
+  useEffect(() => {
+    const getSelected = () => {
+      setTimeout(() => {
+        if (isPressedRenameChannel) {
+          inputRenameRef.current.select();
+          inputRenameRef.current.focus();
+        }
+      });
+    };
+    getSelected();
+  }, [isPressedRenameChannel]);
 
-  return (
-    <Modal show={isPressedRemoveChannel} onHide={handleClickCloseModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>Переименовать канал</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label visuallyHidden>Имя канала</Form.Label>
-            <Form.Control
-              type="text"
-              autoFocus
-              value={formik.values.inputValue}
-            />
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClickCloseModal}>
-          Отменить
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => handleRemoveChannel(idToRemove)}
-        >
-          Отправить
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
+  if (channelName) {
+    return (
+      <Modal
+        show={isPressedRenameChannel}
+        onHide={handleClickCloseModal}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Переименовать канал</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={formik.handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label visuallyHidden htmlFor="inputValue">
+                Имя канала
+              </Form.Label>
+              <Form.Control
+                ref={inputRenameRef}
+                type="text"
+                name="inputValue"
+                id="inputValue"
+                autoFocus
+                required
+                value={formik.values.inputValue}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                autoComplete="off"
+                isInvalid={
+                  formik.errors.inputValue && formik.touched.inputValue
+                }
+              />
+              <Form.Control.Feedback type="invalid">
+                {formik.errors.inputValue && formik.touched.inputValue
+                  ? formik.errors.inputValue
+                  : null}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClickCloseModal}>
+            Отменить
+          </Button>
+          <Button variant="primary" type="submit" onClick={formik.handleSubmit}>
+            Отправить
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  return null;
 };
 
 export default RenameChannelModal;

@@ -4,12 +4,14 @@
 import axios from 'axios';
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { removeChannel } from './channelSlice';
+import routes from '../routes/routes';
 
 const messagesAdapter = createEntityAdapter();
+
 export const fetchMessages = createAsyncThunk(
   'messages/fetchMessages',
   async (currentToken) => {
-    const response = await axios.get('/api/v1/messages', {
+    const response = await axios.get(routes.messages(), {
       headers: {
         Authorization: `Bearer ${currentToken}`,
       },
@@ -17,9 +19,7 @@ export const fetchMessages = createAsyncThunk(
     return response.data;
   },
 );
-// const socket = io('http://localhost:3000');
 
-// По умолчанию: { ids: [], entities: {} }
 const initialState = messagesAdapter.getInitialState({ socket: null, loadingStatus: 'idle', error: null });
 
 const messagesSlice = createSlice({
@@ -53,10 +53,8 @@ const messagesSlice = createSlice({
       })
       .addCase(removeChannel, (state, action) => {
         const idToRemove = action.payload;
-        console.log(typeof idToRemove);
         const restEntities = Object.values(state.entities)
           .filter(({ channelId }) => channelId !== +idToRemove);
-        console.log(restEntities.values);
         messagesAdapter.setAll(state, restEntities);
       });
   },

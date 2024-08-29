@@ -10,6 +10,7 @@ import {
   getPressedRemoveChannel,
   setPressedChannel,
 } from '../../slices/uiSlice';
+import routes from '../../routes/routes';
 import {
   removeChannel,
   getChannelIdToRemove,
@@ -28,7 +29,7 @@ const RemoveChannelModal = () => {
   };
   const defaultChannelId = 1;
   const handleRemoveChannel = async (id) => {
-    const respose = await axios.delete(`/api/v1/channels/${id}`, {
+    const respose = await axios.delete(routes.editChannel(id), {
       headers: {
         Authorization: `Bearer ${currentToken}`,
       },
@@ -41,22 +42,24 @@ const RemoveChannelModal = () => {
   };
 
   return (
-    <Modal show={isPressedRemoveChannel} onHide={handleClickCloseModal}>
+    <Modal show={isPressedRemoveChannel} onHide={handleClickCloseModal} centered>
       <Modal.Header closeButton>
         <Modal.Title>Удалить канал</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Уверены?</Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClickCloseModal}>
-          Отменить
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => handleRemoveChannel(idToRemove)}
-        >
-          Удалить
-        </Button>
-      </Modal.Footer>
+      <Modal.Body>
+        <p className="lead">Уверены?</p>
+        <div className="d-flex justify-content-end">
+          <Button variant="secondary" onClick={handleClickCloseModal} className="me-2">
+            Отменить
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => handleRemoveChannel(idToRemove)}
+          >
+            Удалить
+          </Button>
+        </div>
+      </Modal.Body>
     </Modal>
   );
 };

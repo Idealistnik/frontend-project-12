@@ -10,6 +10,7 @@ import Channels from '../components/channels';
 import Messages from '../components/messages';
 import AddChannelModal from '../components/modals/addChannelModal';
 import RemoveChannelModal from '../components/modals/removeChannelModal';
+import RenameChannelModal from '../components/modals/renameChannelModal';
 
 const MainPage = () => {
   const vdom = (
@@ -25,6 +26,7 @@ const MainPage = () => {
       </BodyContainer>
       <AddChannelModal />
       <RemoveChannelModal />
+      <RenameChannelModal />
     </>
   );
   return vdom;

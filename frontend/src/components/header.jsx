@@ -20,12 +20,11 @@ const Header = () => {
   const handleLogOut = () => {
     dispatch(setLoggedOut());
     dispatch(removeUserInfo());
-    // dispatch(removeChannels());
     navigate('/login');
   };
 
   return (
-    <Navbar className="navbar-light bg-white shadow-sm navbar-expand-lg">
+    <Navbar className="bg-white shadow-sm" expand="lg">
       <Container>
         <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
         <Button onClick={handleLogOut} className={classes}>

@@ -7,13 +7,13 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
-import io from 'socket.io-client';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
 // import ToggleButton from 'react-bootstrap/ToggleButton';
 // import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -23,29 +23,28 @@ import {
   messagesSelectors,
   addMessage,
   fetchMessages,
-  addSocket,
 } from '../slices/messagesSlice';
-import { addChannel, removeChannel } from '../slices/channelSlice';
-import { getPressedChannelId, setPressedChannel } from '../slices/uiSlice';
+import routes from '../routes/routes';
+import { channelsSelectors } from '../slices/channelSlice';
+import { getPressedChannelId } from '../slices/uiSlice';
 
 const Messages = () => {
   const isLoggedIn = useSelector(selectorLoggedIn);
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentChannelId = useSelector(getPressedChannelId);
+  const currentChannel = useSelector((state) => channelsSelectors
+    .selectById(state, currentChannelId));
+  const currentChannelName = currentChannel?.name;
   const isLoading = useSelector((state) => state.messages.loadingStatus);
-  console.log(isLoading);
   const channelMessagesList = messagesList
     .filter((message) => +message.channelId === currentChannelId);
   const messagesCount = _.size(channelMessagesList);
-
   const [currentToken, currentUser] = useSelector(getUserInfo);
-  // const channelList = useSelector(channelsSelectors.selectAll);
   const inputRef = useRef();
   const dispatch = useDispatch();
   useEffect(() => {
     inputRef.current.focus();
   });
-  // localStorage.clear();
   const formik = useFormik({
     initialValues: {
       inputValue: '',
@@ -57,7 +56,7 @@ const Messages = () => {
           channelId: currentChannelId,
           username: currentUser,
         };
-        const response = await axios.post('/api/v1/messages', newMessage, {
+        const response = await axios.post(routes.messages(), newMessage, {
           headers: {
             Authorization: `Bearer ${currentToken}`,
           },
@@ -75,38 +74,43 @@ const Messages = () => {
       dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
     }
   }, [dispatch, currentToken, isLoggedIn]);
-  const defaultChannelId = 1;
-  useEffect(() => {
-    const socket = io('http://localhost:3000');
-    dispatch(addSocket(socket));
-    socket.on('newMessage', (payload) => {
-      dispatch(addMessage(payload));
-    });
-    socket.on('newChannel', (payload) => {
-      dispatch(addChannel(payload));
-    });
-    socket.on('removeChannel', (payload) => {
-      dispatch(removeChannel(payload.id));
-      dispatch(setPressedChannel(defaultChannelId));
-    });
+  // const defaultChannelId = 1;
+  // useEffect(() => {
+  //   const socket = io('http://localhost:3000');
+  //   dispatch(addSocket(socket));
+  //   socket.on('newMessage', (payload) => {
+  //     dispatch(addMessage(payload));
+  //   });
+  //   socket.on('newChannel', (payload) => {
+  //     dispatch(addChannel(payload));
+  //   });
+  //   socket.on('removeChannel', (payload) => {
+  //     dispatch(removeChannel(payload.id));
+  //     dispatch(setPressedChannel(defaultChannelId));
+  //   });
+  //   socket.on('renameChannel', (payload) => {
+  //     const currentId = payload.id;
+  //     const currentName = payload.name;
+  //     dispatch(renameChannel({ id: currentId, changes: { name: currentName } }));
+  //   });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, [dispatch]);
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, [dispatch]);
 
   const vdom = (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b># general</b>
+            <b># {currentChannelName}</b>
           </p>
           <span className="text-muted">{messagesCount} сообщений</span>
         </div>
         <div
           id="messages-box"
-          className="chat-messages overflow-auto px-5 d-flex flex-column"
+          className="chat-messages overflow-auto px-5"
         >
           {isLoading === 'loading' ? (
             <div
@@ -118,11 +122,13 @@ const Messages = () => {
               </Spinner>
             </div>
           ) : (
-            channelMessagesList.map(({ body, username, id }) => (
-              <div key={id} className="text-break mb-2">
-                <b>{username}</b>: {body}
-              </div>
-            ))
+            <ScrollToBottom className="h-100">
+              {channelMessagesList.map(({ body, username, id }) => (
+                <div key={id} className="text-break mb-2">
+                  <b>{username}</b>: {body}
+                </div>
+              ))}
+            </ScrollToBottom>
           )}
         </div>
         <div className="mt-auto px-5 py-3">
@@ -151,7 +157,7 @@ const Messages = () => {
                 className="btn-group-vertical"
                 disabled={formik.values.inputValue === ''}
               >
-                <ArrowRightSquare />
+                <ArrowRightSquare width="20" height="20" />
                 <span className="visually-hidden">Отправить</span>
               </Button>
             </Form.Group>
@@ -165,12 +171,3 @@ const Messages = () => {
 };
 
 export default Messages;
-// const getMessages = async () => {
-//   const response = await axios.get('/api/v1/messages', {
-//     headers: {
-//       Authorization: `Bearer ${currentToken}`,
-//     },
-//   });
-//   return response.data;
-// };
-// getMessages().then((data) => dispatch(setMessages(data)));

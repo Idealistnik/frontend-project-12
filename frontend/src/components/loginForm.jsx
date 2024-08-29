@@ -2,17 +2,26 @@
 /* eslint-disable functional/no-try-statement */
 
 import React, { useRef, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { Spinner } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import axios from 'axios';
+// import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { setUserInfo, setLoggedIn, setUserInfoToStorage } from '../slices/userSlice';
+import {
+  // setUserInfo,
+  // setLoggedIn,
+  // setUserInfoToStorage,
+  fetchLogin,
+  selectorLoadingStatus,
+} from '../slices/userSlice';
 
 const LoginForm = () => {
   // const [users, setUser] = useState([]);
   const [authFailed, setAuthFailed] = useState(false);
+  // const isLoading = useSelector((state) => state.user.loadingStatus);
+  const isLoading = useSelector(selectorLoadingStatus);
   const inputref = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,10 +40,11 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       setAuthFailed(false);
       try {
-        const response = await axios.post('/api/v1/login', values);
-        dispatch(setUserInfoToStorage(response.data));
-        dispatch(setUserInfo(response.data));
-        dispatch(setLoggedIn());
+        // const response = await axios.post('/api/v1/login', values);
+        // dispatch(setUserInfoToStorage(response.data));
+        // dispatch(setUserInfo(response.data));
+        // dispatch(setLoggedIn());
+        dispatch(fetchLogin(values));
         navigate('/');
       } catch (error) {
         setAuthFailed(true);
@@ -61,6 +71,7 @@ const LoginForm = () => {
           onChange={formik.handleChange}
           value={formik.values.username}
           isInvalid={authFailed}
+          disabled={isLoading === 'loading'}
         />
         <Form.Label htmlFor="username">Ваш ник</Form.Label>
       </Form.Group>
@@ -75,15 +86,26 @@ const LoginForm = () => {
           onChange={formik.handleChange}
           value={formik.values.password}
           isInvalid={authFailed}
+          disabled={isLoading === 'loading'}
         />
         <Form.Control.Feedback type="invalid" tooltip>
           Неверные имя пользователя или пароль
         </Form.Control.Feedback>
         <Form.Label htmlFor="password">Пароль</Form.Label>
       </Form.Group>
-      <Button type="submit" variant="outline-primary" className="w-100 mb-3">
+      <Button type="submit" variant="outline-primary" className="w-100 mb-3" disabled={isLoading === 'loading'}>
         Войти
       </Button>
+      {isLoading === 'loading' ? (
+        <div
+          className="d-flex justify-content-center align-items-center w-100"
+          style={{ flexGrow: 1 }}
+        >
+          <Spinner variant="secondary" animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      ) : null}
     </Form>
   );
 };

@@ -16,13 +16,16 @@ import {
   setChannels,
   channelsSelectors,
   setChannelToRemove,
+  setChannelToRename,
 } from '../slices/channelSlice';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
+import routes from '../routes/routes';
 import {
   setPressedChannel,
   getPressedChannelId,
   setPressedAddChannel,
   setPressedRemoveChannel,
+  setPressedRenameChannel,
 } from '../slices/uiSlice';
 
 const Channels = () => {
@@ -36,7 +39,7 @@ const Channels = () => {
   useEffect(() => {
     if (isLoggedIn) {
       const getChannels = async () => {
-        const response = await axios.get('/api/v1/channels', {
+        const response = await axios.get(routes.channels(), {
           headers: {
             Authorization: `Bearer ${currentToken}`,
           },
@@ -60,6 +63,11 @@ const Channels = () => {
     dispatch(setChannelToRemove(+currentId));
   };
 
+  const handleRenameChannel = (currentId) => {
+    dispatch(setPressedRenameChannel(true));
+    dispatch(setChannelToRename(+currentId));
+  };
+
   const vdom = (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
@@ -69,7 +77,7 @@ const Channels = () => {
           className="text-primary btn-group-vertical p-0"
           onClick={handleClickAddChannel}
         >
-          <PlusSquare />
+          <PlusSquare width="20" height="20" />
           <span className="visually-hidden">+</span>
         </Button>
       </div>
@@ -86,7 +94,7 @@ const Channels = () => {
               <Button
                 variant={currentChannelId === +id ? 'secondary' : ''}
                 onClick={() => handleClick(id)}
-                className="w-100 rounded-0 text-start"
+                className="w-100 rounded-0 text-start text-truncate"
               >
                 <span className="me-1">#</span>
                 {name}
@@ -109,7 +117,9 @@ const Channels = () => {
                     >
                       Удалить
                     </Dropdown.Item>
-                    <Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => handleRenameChannel(id)}
+                    >
                       Переименовать
                     </Dropdown.Item>
                   </Dropdown.Menu>

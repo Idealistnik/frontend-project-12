@@ -11,6 +11,7 @@ import {
 import LoginPage from './pages/login_Page';
 import Page404 from './pages/404_Page';
 import MainPage from './pages/main_Page';
+import SignUpPage from './pages/signup_Page';
 import { selectorLoggedIn } from './slices/userSlice';
 
 const MainRoute = ({ children }) => {
@@ -33,8 +34,6 @@ const App = () => (
   <BrowserRouter>
     <Routes>
 
-      {/* <Route path="/login" element={<LoginPage />} /> */}
-
       <Route
         path="/login"
         element={(
@@ -54,6 +53,7 @@ const App = () => (
       />
 
       <Route path="*" element={<Page404 />} />
+      <Route path="/signup" element={<SignUpPage />} />
 
     </Routes>
   </BrowserRouter>
