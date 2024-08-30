@@ -4,6 +4,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import Form from 'react-bootstrap/Form';
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
@@ -29,6 +30,7 @@ import { channelsSelectors } from '../slices/channelSlice';
 import { getPressedChannelId } from '../slices/uiSlice';
 
 const Messages = () => {
+  const { t } = useTranslation();
   const isLoggedIn = useSelector(selectorLoggedIn);
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentChannelId = useSelector(getPressedChannelId);
@@ -74,30 +76,6 @@ const Messages = () => {
       dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
     }
   }, [dispatch, currentToken, isLoggedIn]);
-  // const defaultChannelId = 1;
-  // useEffect(() => {
-  //   const socket = io('http://localhost:3000');
-  //   dispatch(addSocket(socket));
-  //   socket.on('newMessage', (payload) => {
-  //     dispatch(addMessage(payload));
-  //   });
-  //   socket.on('newChannel', (payload) => {
-  //     dispatch(addChannel(payload));
-  //   });
-  //   socket.on('removeChannel', (payload) => {
-  //     dispatch(removeChannel(payload.id));
-  //     dispatch(setPressedChannel(defaultChannelId));
-  //   });
-  //   socket.on('renameChannel', (payload) => {
-  //     const currentId = payload.id;
-  //     const currentName = payload.name;
-  //     dispatch(renameChannel({ id: currentId, changes: { name: currentName } }));
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, [dispatch]);
 
   const vdom = (
     <div className="col p-0 h-100">
@@ -106,7 +84,7 @@ const Messages = () => {
           <p className="m-0">
             <b># {currentChannelName}</b>
           </p>
-          <span className="text-muted">{messagesCount} сообщений</span>
+          <span className="text-muted">{t('chat.messageCount', { count: messagesCount })}</span>
         </div>
         <div
           id="messages-box"
@@ -118,7 +96,7 @@ const Messages = () => {
               style={{ flexGrow: 1 }}
             >
               <Spinner variant="secondary" animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
+                <span className="visually-hidden">{t('loading')}</span>
               </Spinner>
             </div>
           ) : (
@@ -141,12 +119,11 @@ const Messages = () => {
               <Form.Control
                 ref={inputRef}
                 name="inputValue"
-                aria-label="Новое сообщение"
                 className="border-0 p-0 ps-2"
                 required
                 id="username"
                 type="text"
-                placeholder="Введите сообщение..."
+                placeholder={t('chat.inputMessage')}
                 onChange={formik.handleChange}
                 value={formik.values.inputValue}
                 autoComplete="off"
@@ -158,7 +135,7 @@ const Messages = () => {
                 disabled={formik.values.inputValue === ''}
               >
                 <ArrowRightSquare width="20" height="20" />
-                <span className="visually-hidden">Отправить</span>
+                <span className="visually-hidden">{t('chat.send')}</span>
               </Button>
             </Form.Group>
           </Form>

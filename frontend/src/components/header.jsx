@@ -1,6 +1,7 @@
 /* eslint-disable functional/no-expression-statement */
 
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
@@ -12,6 +13,7 @@ import {
 } from '../slices/userSlice';
 
 const Header = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector(selectorLoggedIn);
@@ -26,9 +28,9 @@ const Header = () => {
   return (
     <Navbar className="bg-white shadow-sm" expand="lg">
       <Container>
-        <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
+        <Navbar.Brand href="/">{t('hexletChat')}</Navbar.Brand>
         <Button onClick={handleLogOut} className={classes}>
-          Выйти
+          {t('logout')}
         </Button>
       </Container>
     </Navbar>

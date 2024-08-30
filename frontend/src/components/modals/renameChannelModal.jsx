@@ -3,6 +3,7 @@
 /* eslint-disable functional/no-conditional-statement */
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -23,6 +24,7 @@ import {
 import { getUserInfo } from '../../slices/userSlice';
 
 const RenameChannelModal = () => {
+  const { t } = useTranslation();
   const inputRenameRef = useRef();
   const dispatch = useDispatch();
   const isPressedRenameChannel = useSelector(getPressedRenameChannel);
@@ -64,7 +66,6 @@ const RenameChannelModal = () => {
           },
         );
         const currentId = response.data.id;
-        console.log(response.data);
         const currentName = response.data.name;
         dispatch(
           renameChannel({ id: currentId, changes: { name: currentName } }),
@@ -72,7 +73,7 @@ const RenameChannelModal = () => {
         dispatch(setChannelToRename(null));
         resetForm();
         dispatch(setPressedRenameChannel(false));
-        handleClickCloseModal(); // Закрываем модальное окно после успешной отправки формы
+        handleClickCloseModal();
       } catch (e) {
         console.error(e);
       }
@@ -99,13 +100,13 @@ const RenameChannelModal = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Переименовать канал</Modal.Title>
+          <Modal.Title>{t('modals.rename')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label visuallyHidden htmlFor="inputValue">
-                Имя канала
+                {t('modals.channelName')}
               </Form.Label>
               <Form.Control
                 ref={inputRenameRef}
@@ -132,10 +133,10 @@ const RenameChannelModal = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClickCloseModal}>
-            Отменить
+            {t('modals.cancel')}
           </Button>
           <Button variant="primary" type="submit" onClick={formik.handleSubmit}>
-            Отправить
+            {t('modals.submit')}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -4,6 +4,7 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -20,6 +21,7 @@ import { getUserInfo } from '../../slices/userSlice';
 import { channelsSelectors, addChannel } from '../../slices/channelSlice';
 
 const AddChannelModal = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const isPressedAddChannel = useSelector(getPressedAddChannel);
   const channels = useSelector(channelsSelectors.selectAll);
@@ -64,13 +66,13 @@ const AddChannelModal = () => {
   return (
     <Modal show={isPressedAddChannel} onHide={handleClickCloseModal} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modals.add')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group>
             <Form.Label visuallyHidden htmlFor="inputValue">
-              Имя канала
+              {t('modals.channelName')}
             </Form.Label>
             <Form.Control
               className="mb-2"
@@ -95,7 +97,7 @@ const AddChannelModal = () => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClickCloseModal}>
-          Отменить
+          {t('modals.cancel')}
         </Button>
         <Button
           className="me-2"
@@ -103,7 +105,7 @@ const AddChannelModal = () => {
           variant="primary"
           onClick={formik.handleSubmit} // если убрать то не будет сабмитить почему-то
         >
-          Отправить
+          {t('modals.submit')}
         </Button>
       </Modal.Footer>
     </Modal>

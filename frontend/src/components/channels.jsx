@@ -2,13 +2,11 @@
 /* eslint-disable functional/no-conditional-statement */
 
 import { useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { PlusSquare } from 'react-bootstrap-icons';
 import Dropdown from 'react-bootstrap/Dropdown';
-// import ToggleButton from 'react-bootstrap/ToggleButton';
-// import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
@@ -29,12 +27,12 @@ import {
 } from '../slices/uiSlice';
 
 const Channels = () => {
+  const { t } = useTranslation();
   const isLoggedIn = useSelector(selectorLoggedIn);
   const channelList = useSelector(channelsSelectors.selectAll);
   const [currentToken] = useSelector(getUserInfo);
   const currentChannelId = useSelector(getPressedChannelId);
   const dispatch = useDispatch();
-  // localStorage.clear();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -71,14 +69,14 @@ const Channels = () => {
   const vdom = (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>Каналы</b>
+        <b>{t('channels.channels')}</b>
         <Button
           variant=""
           className="text-primary btn-group-vertical p-0"
           onClick={handleClickAddChannel}
         >
           <PlusSquare width="20" height="20" />
-          <span className="visually-hidden">+</span>
+          <span className="visually-hidden">{t('channels.plus')}</span>
         </Button>
       </div>
       <Nav
@@ -108,19 +106,19 @@ const Channels = () => {
                     id="dropdown-split-basic"
                     className="flex-grow-0"
                   >
-                    <span className="visually-hidden">Управление каналом</span>
+                    <span className="visually-hidden">{t('channels.menu')}</span>
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
                     <Dropdown.Item
                       onClick={() => handleRemoveChannel(id)}
                     >
-                      Удалить
+                      {t('channels.remove')}
                     </Dropdown.Item>
                     <Dropdown.Item
                       onClick={() => handleRenameChannel(id)}
                     >
-                      Переименовать
+                      {t('channels.rename')}
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </>

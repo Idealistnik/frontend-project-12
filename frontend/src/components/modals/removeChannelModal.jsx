@@ -3,6 +3,7 @@
 /* eslint-disable functional/no-conditional-statement */
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {
@@ -19,6 +20,7 @@ import {
 import { getUserInfo } from '../../slices/userSlice';
 
 const RemoveChannelModal = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const isPressedRemoveChannel = useSelector(getPressedRemoveChannel);
   const idToRemove = useSelector(getChannelIdToRemove);
@@ -44,19 +46,19 @@ const RemoveChannelModal = () => {
   return (
     <Modal show={isPressedRemoveChannel} onHide={handleClickCloseModal} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('modals.remove')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены?</p>
+        <p className="lead">{t('modals.confirmation')}</p>
         <div className="d-flex justify-content-end">
           <Button variant="secondary" onClick={handleClickCloseModal} className="me-2">
-            Отменить
+            {t('modals.cancel')}
           </Button>
           <Button
             variant="danger"
             onClick={() => handleRemoveChannel(idToRemove)}
           >
-            Удалить
+            {t('modals.confirm')}
           </Button>
         </div>
       </Modal.Body>

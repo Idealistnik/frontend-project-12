@@ -57,7 +57,7 @@ const userSlice = createSlice({
     },
     setLoggedOut: (state) => {
       state.loggedIn = false;
-      // localStorage.clear();
+      localStorage.clear();
     },
   },
   extraReducers: (builder) => {

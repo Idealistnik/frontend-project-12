@@ -3,6 +3,7 @@
 /* eslint-disable functional/no-conditional-statement */
 
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
@@ -17,6 +18,7 @@ import {
 } from '../slices/userSlice';
 
 const SignForm = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoading = useSelector(selectorLoadingStatus);
@@ -39,11 +41,12 @@ const SignForm = () => {
       passwordConfirm: '',
     },
     validationSchema: schema,
+    enableReinitialize: true, // переинициализируем если изменился channelName
     onSubmit: async (values) => {
       try {
         const data = { username: values.username, password: values.password };
         await dispatch(fetchSignIn(data));
-        if (isLoading === 'idle') {
+        if (errorMessage) {
           navigate('/');
         }
       } catch (e) {
@@ -57,14 +60,14 @@ const SignForm = () => {
       className="col-12 col-md-6 mt-3 mt-md-0"
       onSubmit={formik.handleSubmit}
     >
-      <h1 className="text-center mb-4">Регистрация</h1>
+      <h1 className="text-center mb-4">{t('signup.header')}</h1>
       <Form.Group className="mb-3 form-floating">
         <Form.Control
           name="username"
           autoComplete="username"
           required
           id="username"
-          placeholder="Имя пользователя"
+          placeholder={t('signup.username')}
           onChange={formik.handleChange}
           value={formik.values.username}
           isInvalid={formik.errors.username && formik.touched.username}
@@ -73,7 +76,7 @@ const SignForm = () => {
         <Form.Control.Feedback type="invalid" tooltip>
           {formik.errors.username ? formik.errors.username : null}
         </Form.Control.Feedback>
-        <Form.Label htmlFor="username">Имя пользователя</Form.Label>
+        <Form.Label htmlFor="username">{t('signup.username')}</Form.Label>
       </Form.Group>
       <Form.Group className="mb-3 form-floating">
         <Form.Control
@@ -81,7 +84,7 @@ const SignForm = () => {
           type="password"
           autoComplete="current-password"
           required
-          placeholder="Пароль"
+          placeholder={t('signup.password')}
           id="password"
           onChange={formik.handleChange}
           value={formik.values.password}
@@ -91,7 +94,7 @@ const SignForm = () => {
         <Form.Control.Feedback type="invalid" tooltip>
           {formik.errors.password ? formik.errors.password : null}
         </Form.Control.Feedback>
-        <Form.Label htmlFor="password">Пароль</Form.Label>
+        <Form.Label htmlFor="password">{t('signup.password')}</Form.Label>
       </Form.Group>
       <Form.Group className="mb-3 form-floating">
         <Form.Control
@@ -99,7 +102,7 @@ const SignForm = () => {
           type="password"
           autoComplete="current-password"
           required
-          placeholder="Подтвердите пароль"
+          placeholder={t('signup.confirm')}
           id="passwordConfirm"
           onChange={formik.handleChange}
           value={formik.values.passwordConfirm}
@@ -112,10 +115,10 @@ const SignForm = () => {
         <Form.Control.Feedback type="invalid" tooltip>
           {formik.errors.passwordConfirm
           || (errorMessage === 'Request failed with status code 409'
-            ? 'Такой пользователь уже существует'
+            ? t('signup.alreadyExists')
             : null)}
         </Form.Control.Feedback>
-        <Form.Label htmlFor="passwordConfirm">Подтвердите пароль</Form.Label>
+        <Form.Label htmlFor="passwordConfirm">{t('signup.confirm')}</Form.Label>
       </Form.Group>
       <Button
         type="submit"
@@ -123,7 +126,7 @@ const SignForm = () => {
         className="w-100 mb-3"
         disabled={isLoading === 'loading'}
       >
-        Зарегистрироваться
+        {t('signup.submit')}
       </Button>
       {isLoading === 'loading' ? (
         <div
@@ -131,7 +134,7 @@ const SignForm = () => {
           style={{ flexGrow: 1 }}
         >
           <Spinner variant="secondary" animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">{t('loading')}</span>
           </Spinner>
         </div>
       ) : null}

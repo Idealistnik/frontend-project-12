@@ -5,6 +5,8 @@
 
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
+import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next';
 import io from 'socket.io-client';
 import App from './App';
 import {
@@ -17,8 +19,20 @@ import {
   renameChannel,
 } from './slices/channelSlice';
 import { setPressedChannel } from './slices/uiSlice';
+import resources from './locales/index';
 
 const InitContainer = () => {
+  i18next
+    .use(initReactI18next)
+    .init({
+      debug: true,
+      resources, // передаем переводы текстов интерфейса в формате JSON
+      fallbackLng: 'ru', // если переводы на языке пользователя недоступны, то будет использоваться язык, указанный в этом поле
+      interpolation: {
+        escapeValue: false,
+      },
+    });
+
   const dispatch = useDispatch();
   const defaultChannelId = 1;
   useEffect(() => {

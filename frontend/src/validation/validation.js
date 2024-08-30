@@ -2,18 +2,28 @@
 /* eslint-disable functional/no-try-statement */
 /* eslint-disable functional/no-conditional-statement */
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const setLocale = () => {
+  const { t } = useTranslation();
   yup.setLocale({
     mixed: {
-      required: 'Обязательное поле',
-      notOneOf: 'Должно быть уникальным',
-      oneOf: 'Пароли должны совпадать',
+      required: t('modals.required'),
+      notOneOf: t('modals.uniq'),
+      oneOf: t('signup.mustMatch'),
     },
     string: {
-      min: ({ min }) =>
-        min === 3 ? 'От 3 до 20 символов' : 'Не менее 6 символов',
-      max: 'От 3 до 20 символов',
+      // min: ({ min }) =>
+      // min === 3
+      //   ? t('signup.usernameConstraints')
+      //   : t('signup.passMin'),
+      min: ({ min }) => {
+        if (min === 3) {
+          return t('signup.usernameConstraints');
+        }
+        return t('signup.passMin');
+      },
+      max: t('signup.usernameConstraints'),
     },
   });
 };
