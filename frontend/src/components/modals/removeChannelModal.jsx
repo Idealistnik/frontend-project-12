@@ -48,6 +48,7 @@ const RemoveChannelModal = () => {
       dispatch(setPressedChannel(defaultChannelId));
       dispatch(setChannelToRemove(null));
       dispatch(setPressedRemoveChannel(false));
+      console.log('Channel removed successfully'); // доходит до сюда
       toast.success(t('channels.removed'));
     } catch (e) {
       if (e.message === 'Network Error') {

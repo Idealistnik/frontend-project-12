@@ -5,6 +5,7 @@
 
 import Form from 'react-bootstrap/Form';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
@@ -54,7 +55,7 @@ const Messages = () => {
     onSubmit: async (values, { resetForm }) => {
       try {
         const newMessage = {
-          body: values.inputValue,
+          body: leoProfanity.clean(values.inputValue),
           channelId: currentChannelId,
           username: currentUser,
         };

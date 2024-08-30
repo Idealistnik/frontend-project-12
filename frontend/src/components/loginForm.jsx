@@ -2,7 +2,7 @@
 /* eslint-disable functional/no-conditional-statement */
 /* eslint-disable functional/no-try-statement */
 
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';

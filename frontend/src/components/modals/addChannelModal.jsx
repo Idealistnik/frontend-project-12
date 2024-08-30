@@ -5,7 +5,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-
+import leoProfanity from 'leo-profanity';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -43,7 +43,11 @@ const AddChannelModal = () => {
     },
     validationSchema: schema,
     onSubmit: async (values, { resetForm }) => {
-      const currentValue = values.inputValue;
+      const currentValue = leoProfanity.clean(values.inputValue);
+      if (currentValue.includes('*')) {
+        toast.error('Канал не создан из-за ненормативной лексики');
+        return;
+      }
       const newChannel = { name: currentValue };
       try {
         const response = await axios.post(routes.channels(), newChannel, {
