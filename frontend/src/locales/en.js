@@ -16,7 +16,7 @@ const en = {
       password: 'Password',
       submit: 'Submit',
       signup: 'Sign up',
-      newToChat: 'New to chat?',
+      newToChat: 'New to chat? ',
       authFailed: 'username or password is incorrect',
       header: 'Login',
     },

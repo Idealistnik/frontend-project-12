@@ -45,10 +45,8 @@ const SignForm = () => {
     onSubmit: async (values) => {
       try {
         const data = { username: values.username, password: values.password };
-        await dispatch(fetchSignIn(data));
-        if (errorMessage) {
-          navigate('/');
-        }
+        await dispatch(fetchSignIn(data)).unwrap();
+        navigate('/');
       } catch (e) {
         console.error(e);
       }
