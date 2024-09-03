@@ -25,8 +25,7 @@ const AddChannelModal = () => {
   const channels = useSelector(channelsSelectors.selectAll);
   const channelsNames = channels.map((channel) => channel.name);
   const [currentToken] = useSelector(getUserInfo);
-  const handleClickCloseModal = (formik) => {
-    formik.resetForm();
+  const handleClickCloseModal = () => {
     dispatch(setPressedAddChannel(false));
   };
   setLocale(t);
@@ -61,7 +60,7 @@ const AddChannelModal = () => {
   });
 
   return (
-    <Modal show={isPressedAddChannel} onHide={() => handleClickCloseModal(formik)} centered>
+    <Modal show={isPressedAddChannel} onHide={handleClickCloseModal} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('modals.add')}</Modal.Title>
       </Modal.Header>
@@ -95,7 +94,7 @@ const AddChannelModal = () => {
       <Modal.Footer>
         <Button
           variant="secondary"
-          onClick={() => handleClickCloseModal(formik)}
+          onClick={handleClickCloseModal}
         >
           {t('modals.cancel')}
         </Button>
