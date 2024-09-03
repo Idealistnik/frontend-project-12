@@ -1,7 +1,4 @@
-/* eslint-disable functional/no-expression-statement */
 /* eslint-disable no-param-reassign */
-/* eslint-disable functional/no-try-statement */
-
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../routes/routes';
@@ -18,7 +15,6 @@ export const fetchSignIn = createAsyncThunk(
   'user/fetchSignIn',
   async (values) => {
     const response = await axios.post(routes.signup(), values);
-    console.log(response.data);
     return response.data;
   },
 );
@@ -105,9 +101,8 @@ export const {
 export const selectorLoggedIn = (state) => state.user.loggedIn;
 export const selectorLoadingStatus = (state) => state.user.loadingStatus;
 export const selectorError = (state) => state.user.error;
-// export const getUserInfo = (state) => Object.values(state.user.userInfo);
 export const getUserInfo = createSelector(
   (state) => state.user.userInfo,
-  (userInfo) => Object.values(userInfo), // мемоизирует  - если не меняется userInfo
+  (userInfo) => Object.values(userInfo),
 );
 export default userSlice;
