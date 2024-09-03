@@ -1,3 +1,7 @@
+/* eslint-disable functional/no-expression-statement */
+/* eslint-disable functional/no-try-statement */
+/* eslint-disable functional/no-conditional-statement */
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
@@ -37,7 +41,7 @@ const SignForm = () => {
       passwordConfirm: '',
     },
     validationSchema: schema,
-    enableReinitialize: true,
+    enableReinitialize: true, // переинициализируем если изменился channelName
     onSubmit: async (values) => {
       try {
         const data = { username: values.username, password: values.password };

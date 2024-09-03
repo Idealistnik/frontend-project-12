@@ -1,8 +1,13 @@
+/* eslint-disable functional/no-expression-statement */
+/* eslint-disable functional/no-try-statement */
+/* eslint-disable functional/no-conditional-statement */
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -37,6 +42,10 @@ const AddChannelModal = () => {
     validationSchema: schema,
     onSubmit: async (values, { resetForm }) => {
       const currentValue = leoProfanity.clean(values.inputValue);
+      // if (currentValue.includes('*')) {
+      //   toast.error('Канал не создан из-за ненормативной лексики');
+      //   return;
+      // }
       const newChannel = { name: currentValue };
       try {
         const response = await axios.post(routes.channels(), newChannel, {
@@ -50,6 +59,7 @@ const AddChannelModal = () => {
         handleClickCloseModal();
         toast.success(t('channels.created'));
       } catch (e) {
+        console.log(e);
         if (e.message === 'Network Error') {
           toast.error(t('errors.network'));
           return;

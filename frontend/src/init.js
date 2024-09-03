@@ -1,3 +1,6 @@
+/* eslint-disable functional/no-expression-statement */
+/* eslint-disable functional/no-conditional-statement */
+/* eslint-disable functional/no-try-statement */
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import { Provider } from 'react-redux';

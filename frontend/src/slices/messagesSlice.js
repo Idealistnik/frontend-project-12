@@ -1,4 +1,6 @@
+/* eslint-disable functional/no-expression-statement */
 /* eslint-disable no-param-reassign */
+/* eslint-disable functional/no-try-statement */
 import axios from 'axios';
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { removeChannel } from './channelSlice';
