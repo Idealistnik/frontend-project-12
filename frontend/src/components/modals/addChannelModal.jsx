@@ -42,10 +42,10 @@ const AddChannelModal = () => {
     validationSchema: schema,
     onSubmit: async (values, { resetForm }) => {
       const currentValue = leoProfanity.clean(values.inputValue);
-      if (currentValue.includes('*')) {
-        toast.error('Канал не создан из-за ненормативной лексики');
-        return;
-      }
+      // if (currentValue.includes('*')) {
+      //   toast.error('Канал не создан из-за ненормативной лексики');
+      //   return;
+      // }
       const newChannel = { name: currentValue };
       try {
         const response = await axios.post(routes.channels(), newChannel, {
@@ -102,7 +102,10 @@ const AddChannelModal = () => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => handleClickCloseModal(formik)}>
+        <Button
+          variant="secondary"
+          onClick={() => handleClickCloseModal(formik)}
+        >
           {t('modals.cancel')}
         </Button>
         <Button
