@@ -119,7 +119,7 @@ const Messages = () => {
             <Form.Group className="input-group has-validation">
               <Form.Control
                 ref={inputRef}
-                aria-label={t('chat.inputMessage')}
+                aria-label={t('chat.newMessage')}
                 name="inputValue"
                 className="border-0 p-0 ps-2"
                 required
