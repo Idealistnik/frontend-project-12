@@ -1,4 +1,4 @@
-/* eslint-disable functional/no-expression-statement */
+// /* eslint-disable functional/no-expression-statement */
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Container from 'react-bootstrap/Container';

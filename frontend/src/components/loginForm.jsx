@@ -1,6 +1,6 @@
-/* eslint-disable functional/no-expression-statement */
-/* eslint-disable functional/no-conditional-statement */
-/* eslint-disable functional/no-try-statement */
+// /* eslint-disable functional/no-expression-statement */
+// /* eslint-disable functional/no-conditional-statement */
+// /* eslint-disable functional/no-try-statement */
 
 import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,29 +9,16 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
 import { useFormik } from 'formik';
-// import axios from 'axios';
-// import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
-  // setUserInfo,
-  // setLoggedIn,
-  // setUserInfoToStorage,
   fetchLogin,
   selectorLoadingStatus,
-  // selectorError,
-  // setUserInfoToStorage,
-  // setUserInfo,
-  // setLoggedIn,
 } from '../slices/userSlice';
 
 const LoginForm = () => {
-  // const [users, setUser] = useState([]);
   const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
-  // const isLoading = useSelector((state) => state.user.loadingStatus);
-
   const isLoading = useSelector(selectorLoadingStatus);
-  console.log(isLoading);
   const inputref = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
