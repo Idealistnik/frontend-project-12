@@ -3,6 +3,7 @@
 # а не в корне проекта
 # Не забудьте удалить ключ eslintConfig из package.json,
 # автоматический созданный при запуске CRA
+root: true
 env:
   browser: true
   es2021: true
@@ -11,7 +12,7 @@ env:
 extends:
   - airbnb
   - plugin:react/recommended
-  - plugin:functional/recommended
+  # - plugin:functional/recommended
   - plugin:react-hooks/recommended
 
 parserOptions:
