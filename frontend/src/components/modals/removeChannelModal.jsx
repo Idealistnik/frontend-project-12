@@ -1,6 +1,3 @@
-/* eslint-disable functional/no-expression-statement */
-/* eslint-disable functional/no-try-statement */
-/* eslint-disable functional/no-conditional-statement */
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +44,6 @@ const RemoveChannelModal = () => {
       dispatch(setPressedChannel(defaultChannelId));
       dispatch(setChannelToRemove(null));
       dispatch(setPressedRemoveChannel(false));
-      console.log('Channel removed successfully'); // доходит до сюда
       toast.success(t('channels.removed'));
     } catch (e) {
       if (e.message === 'Network Error') {

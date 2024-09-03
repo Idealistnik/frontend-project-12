@@ -1,8 +1,4 @@
-/* eslint-disable functional/no-expression-statement */
-/* eslint-disable functional/no-conditional-statement */
-/* eslint-disable functional/no-try-statement */
 /* eslint-disable react/jsx-one-expression-per-line */
-
 import Form from 'react-bootstrap/Form';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
@@ -12,14 +8,10 @@ import { ArrowRightSquare } from 'react-bootstrap-icons';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
-// import ToggleButton from 'react-bootstrap/ToggleButton';
-// import ButtonGroup from 'react-bootstrap/ButtonGroup';
-// import { setChannels, channelsSelectors } from '../slices/channelSlice';
 import {
   setMessages,
   messagesSelectors,

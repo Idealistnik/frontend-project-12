@@ -1,11 +1,7 @@
-/* eslint-disable functional/no-expression-statement */
 /* eslint-disable no-param-reassign */
-/* eslint-disable functional/no-try-statement */
-
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
 const channelsAdapter = createEntityAdapter();
-// По умолчанию: { ids: [], entities: {} }
 const initialState = channelsAdapter.getInitialState({ toRemove: null, toRename: null });
 
 const channelSlice = createSlice({

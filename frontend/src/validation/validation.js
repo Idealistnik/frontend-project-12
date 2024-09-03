@@ -1,6 +1,3 @@
-/* eslint-disable functional/no-expression-statement */
-/* eslint-disable functional/no-try-statement */
-/* eslint-disable functional/no-conditional-statement */
 import * as yup from 'yup';
 
 const setLocale = (t) => {
@@ -11,10 +8,6 @@ const setLocale = (t) => {
       oneOf: t('signup.mustMatch'),
     },
     string: {
-      // min: ({ min }) =>
-      // min === 3
-      //   ? t('signup.usernameConstraints')
-      //   : t('signup.passMin'),
       min: ({ min }) => {
         if (min === 3) {
           return t('signup.usernameConstraints');

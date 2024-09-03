@@ -1,7 +1,3 @@
-// /* eslint-disable functional/no-expression-statement */
-// /* eslint-disable functional/no-conditional-statement */
-// /* eslint-disable functional/no-try-statement */
-
 import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,12 +31,11 @@ const LoginForm = () => {
       setAuthFailed(false);
       try {
         await dispatch(fetchLogin(values))
-          .unwrap(); // без unwrap делал if (response.type === 'user/fetchLogin/rejected')
+          .unwrap();
         navigate('/');
       } catch (error) {
         setAuthFailed(true);
         inputref.current.select();
-        console.error(error);
       }
     },
   });
