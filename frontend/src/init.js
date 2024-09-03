@@ -39,7 +39,7 @@ const init = async () => {
 
   const defaultChannelId = 1;
 
-  const socket = io('http://localhost:3000');
+  const socket = io();
 
   socket.on('newMessage', (payload) => {
     store.dispatch(addMessage(payload));
