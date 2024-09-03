@@ -20,15 +20,12 @@ export const fetchMessages = createAsyncThunk(
   },
 );
 
-const initialState = messagesAdapter.getInitialState({ socket: null, loadingStatus: 'idle', error: null });
+const initialState = messagesAdapter.getInitialState({ loadingStatus: 'idle', error: null });
 
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    addSocket: (state, action) => {
-      state.socket = action.payload;
-    },
     addMessage: messagesAdapter.addOne,
     setMessages: messagesAdapter.addMany,
     removeMessages: messagesAdapter.removeAll,
@@ -65,7 +62,6 @@ export const {
   setMessages,
   removeMessages,
   removeMessage,
-  addSocket,
 } = messagesSlice.actions;
 export const messagesSelectors = messagesAdapter.getSelectors((state) => state.messages);
 export default messagesSlice;

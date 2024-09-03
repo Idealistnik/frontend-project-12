@@ -1,6 +1,4 @@
 /* eslint-disable functional/no-expression-statement */
-
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Container from 'react-bootstrap/Container';
@@ -15,10 +13,7 @@ import {
 } from '../slices/userSlice';
 
 const Header = () => {
-  const { t, i18n } = useTranslation();
-  const en = 'en';
-  const ru = 'ru';
-  const [currentLang, setLang] = useState(ru); // удалить позже
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector(selectorLoggedIn);
@@ -30,20 +25,11 @@ const Header = () => {
     navigate('/login');
   };
 
-  const handleChangeLang = () => {
-    const newLang = currentLang === ru ? en : ru;
-    setLang(newLang);
-    i18n.changeLanguage(newLang);
-  };
-
   return (
     <Navbar className="bg-white shadow-sm" expand="lg">
       <Container>
         <Navbar.Brand href="/">{t('hexletChat')}</Navbar.Brand>
         <ButtonGroup>
-          <Button onClick={handleChangeLang} className="me-2">
-            {currentLang}
-          </Button>
           <Button onClick={handleLogOut} className={classes}>
             {t('logout')}
           </Button>

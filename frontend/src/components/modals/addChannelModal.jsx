@@ -2,11 +2,10 @@
 /* eslint-disable functional/no-try-statement */
 /* eslint-disable functional/no-conditional-statement */
 
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Form from 'react-bootstrap/Form';
@@ -32,10 +31,9 @@ const AddChannelModal = () => {
   const channelsNames = channels.map((channel) => channel.name);
   const [currentToken] = useSelector(getUserInfo);
   const handleClickCloseModal = () => {
-    // formik.resetForm();
     dispatch(setPressedAddChannel(false));
   };
-  setLocale();
+  setLocale(t);
   const schema = getSchemaChannels(channelsNames);
   const formik = useFormik({
     initialValues: {
@@ -71,63 +69,52 @@ const AddChannelModal = () => {
     },
   });
 
-  useEffect(() => {
-    if (!isPressedAddChannel) {
-      formik.resetForm();
-    }
-  }, [isPressedAddChannel]);
-
   return (
-    <>
-      <Modal show={isPressedAddChannel} onHide={handleClickCloseModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{t('modals.add')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={formik.handleSubmit}>
-            <Form.Group>
-              <Form.Label visuallyHidden htmlFor="inputValue">
-                {t('modals.channelName')}
-              </Form.Label>
-              <Form.Control
-                className="mb-2"
-                type="text"
-                name="inputValue"
-                id="inputValue"
-                autoFocus
-                required
-                onChange={formik.handleChange}
-                value={formik.values.inputValue}
-                onBlur={formik.handleBlur}
-                autoComplete="off"
-                isInvalid={
-                  formik.errors.inputValue && formik.touched.inputValue
-                }
-              />
-              <Form.Control.Feedback type="invalid">
-                {formik.errors.inputValue && formik.touched.inputValue
-                  ? formik.errors.inputValue
-                  : null}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClickCloseModal}>
-            {t('modals.cancel')}
-          </Button>
-          <Button
-            className="me-2"
-            type="submit"
-            variant="primary"
-            onClick={formik.handleSubmit} // если убрать то не будет сабмитить почему-то
-          >
-            {t('modals.submit')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <ToastContainer />
-    </>
+    <Modal show={isPressedAddChannel} onHide={handleClickCloseModal} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{t('modals.add')}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={formik.handleSubmit}>
+          <Form.Group>
+            <Form.Label visuallyHidden htmlFor="inputValue">
+              {t('modals.channelName')}
+            </Form.Label>
+            <Form.Control
+              className="mb-2"
+              type="text"
+              name="inputValue"
+              id="inputValue"
+              autoFocus
+              required
+              onChange={formik.handleChange}
+              value={formik.values.inputValue}
+              onBlur={formik.handleBlur}
+              autoComplete="off"
+              isInvalid={formik.errors.inputValue && formik.touched.inputValue}
+            />
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.inputValue && formik.touched.inputValue
+                ? formik.errors.inputValue
+                : null}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={() => handleClickCloseModal(formik)}>
+          {t('modals.cancel')}
+        </Button>
+        <Button
+          className="me-2"
+          type="submit"
+          variant="primary"
+          onClick={formik.handleSubmit}
+        >
+          {t('modals.submit')}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 export default AddChannelModal;

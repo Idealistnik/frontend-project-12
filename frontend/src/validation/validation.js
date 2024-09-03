@@ -2,10 +2,8 @@
 /* eslint-disable functional/no-try-statement */
 /* eslint-disable functional/no-conditional-statement */
 import * as yup from 'yup';
-import { useTranslation } from 'react-i18next';
 
-const setLocale = () => {
-  const { t } = useTranslation();
+const setLocale = (t) => {
   yup.setLocale({
     mixed: {
       required: t('modals.required'),

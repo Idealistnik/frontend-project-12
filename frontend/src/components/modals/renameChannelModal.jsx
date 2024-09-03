@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import axios from 'axios';
@@ -48,7 +48,7 @@ const RenameChannelModal = () => {
     dispatch(setPressedRenameChannel(false));
     dispatch(setChannelToRename(null));
   };
-  setLocale();
+  setLocale(t);
   const schema = getSchemaChannels(channelsNames);
   const formik = useFormik({
     initialValues: {
@@ -104,59 +104,52 @@ const RenameChannelModal = () => {
 
   if (channelName) {
     return (
-      <>
-        <Modal
-          show={isPressedRenameChannel}
-          onHide={handleClickCloseModal}
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>{t('modals.rename')}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={formik.handleSubmit}>
-              <Form.Group className="mb-3">
-                <Form.Label visuallyHidden htmlFor="inputValue">
-                  {t('modals.channelName')}
-                </Form.Label>
-                <Form.Control
-                  ref={inputRenameRef}
-                  type="text"
-                  name="inputValue"
-                  id="inputValue"
-                  autoFocus
-                  required
-                  value={formik.values.inputValue}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  autoComplete="off"
-                  isInvalid={
-                    formik.errors.inputValue && formik.touched.inputValue
-                  }
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formik.errors.inputValue && formik.touched.inputValue
-                    ? formik.errors.inputValue
-                    : null}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClickCloseModal}>
-              {t('modals.cancel')}
-            </Button>
-            <Button
-              variant="primary"
-              type="submit"
-              onClick={formik.handleSubmit}
-            >
-              {t('modals.submit')}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <ToastContainer />
-      </>
+      <Modal
+        show={isPressedRenameChannel}
+        onHide={handleClickCloseModal}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{t('modals.rename')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={formik.handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label visuallyHidden htmlFor="inputValue">
+                {t('modals.channelName')}
+              </Form.Label>
+              <Form.Control
+                ref={inputRenameRef}
+                type="text"
+                name="inputValue"
+                id="inputValue"
+                autoFocus
+                required
+                value={formik.values.inputValue}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                autoComplete="off"
+                isInvalid={
+                  formik.errors.inputValue && formik.touched.inputValue
+                }
+              />
+              <Form.Control.Feedback type="invalid">
+                {formik.errors.inputValue && formik.touched.inputValue
+                  ? formik.errors.inputValue
+                  : null}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClickCloseModal}>
+            {t('modals.cancel')}
+          </Button>
+          <Button variant="primary" type="submit" onClick={formik.handleSubmit}>
+            {t('modals.submit')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     );
   }
   return null;

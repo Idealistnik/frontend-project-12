@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import {
   BrowserRouter,
   Routes,
@@ -56,7 +57,9 @@ const App = () => (
       <Route path="/signup" element={<SignUpPage />} />
 
     </Routes>
+    <ToastContainer />
   </BrowserRouter>
+
 );
 
 export default App;

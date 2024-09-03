@@ -6,8 +6,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {
@@ -60,36 +59,33 @@ const RemoveChannelModal = () => {
   };
 
   return (
-    <>
-      <Modal
-        show={isPressedRemoveChannel}
-        onHide={handleClickCloseModal}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{t('modals.remove')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p className="lead">{t('modals.confirmation')}</p>
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="secondary"
-              onClick={handleClickCloseModal}
-              className="me-2"
-            >
-              {t('modals.cancel')}
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => handleRemoveChannel(idToRemove)}
-            >
-              {t('modals.confirm')}
-            </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
-      <ToastContainer />
-    </>
+    <Modal
+      show={isPressedRemoveChannel}
+      onHide={handleClickCloseModal}
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{t('modals.remove')}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p className="lead">{t('modals.confirmation')}</p>
+        <div className="d-flex justify-content-end">
+          <Button
+            variant="secondary"
+            onClick={handleClickCloseModal}
+            className="me-2"
+          >
+            {t('modals.cancel')}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => handleRemoveChannel(idToRemove)}
+          >
+            {t('modals.confirm')}
+          </Button>
+        </div>
+      </Modal.Body>
+    </Modal>
   );
 };
 

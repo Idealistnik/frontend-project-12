@@ -1,22 +1,29 @@
 /* eslint-disable functional/no-expression-statement */
 import React from 'react';
-import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
+import { Provider, ErrorBoundary } from '@rollbar/react';
 import './index.css';
-import InitContainer from './initContainer';
+import init from './init';
 import reportWebVitals from './reportWebVitals';
-import store from './slices/index';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <Provider store={store}>
+const startApp = async () => {
+  const rollbarConfig = {
+    accessToken: '2a15660f79934906b48e3a9a4777d1dc',
+    environment: 'testenv',
+  };
+
+  const initialization = await init();
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
     <React.StrictMode>
-      <InitContainer />
-    </React.StrictMode>
-  </Provider>,
-);
+      <Provider config={rollbarConfig}>
+        <ErrorBoundary>
+          {initialization}
+        </ErrorBoundary>
+      </Provider>
+    </React.StrictMode>,
+  );
+};
+startApp();
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

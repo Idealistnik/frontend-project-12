@@ -25,7 +25,7 @@ const SignForm = () => {
   const error = useSelector(selectorError);
   const errorMessage = error ? error.message : null;
 
-  setLocale();
+  setLocale(t);
   const schema = yup.object().shape({
     username: yup.string().required().min(3).max(20),
     password: yup.string().required().min(6),
