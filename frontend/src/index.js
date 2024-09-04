@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { Provider, ErrorBoundary } from '@rollbar/react';
 import './index.css';
 import init from './init';
-import reportWebVitals from './reportWebVitals';
 
 const startApp = async () => {
   const rollbarConfig = {
@@ -24,5 +23,3 @@ const startApp = async () => {
   );
 };
 startApp();
-
-reportWebVitals();
