@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
+import { removeChannel } from './channelSlice';
 
 const defaultGeneralChannelId = 1;
 const initialState = {
@@ -25,6 +26,12 @@ const uiSlice = createSlice({
     setPressedRenameChannel: (state, action) => {
       state.pressedChannelRename = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(removeChannel, (state) => {
+        state.pressedChannelId = defaultGeneralChannelId;
+      });
   },
 });
 

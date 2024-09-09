@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-
 import { Provider } from 'react-redux';
 import i18next from 'i18next';
 import leoProfanity from 'leo-profanity';
@@ -12,7 +10,6 @@ import {
   removeChannel,
   renameChannel,
 } from './slices/channelSlice';
-import { setPressedChannel } from './slices/uiSlice';
 import resources from './locales/index';
 import store from './slices/index';
 
@@ -34,8 +31,6 @@ const init = async () => {
       },
     });
 
-  const defaultChannelId = 1;
-
   const socket = io();
 
   socket.on('newMessage', (payload) => {
@@ -46,7 +41,6 @@ const init = async () => {
   });
   socket.on('removeChannel', (payload) => {
     store.dispatch(removeChannel(payload.id));
-    store.dispatch(setPressedChannel(defaultChannelId));
   });
   socket.on('renameChannel', (payload) => {
     const currentId = payload.id;
