@@ -6,7 +6,7 @@ import init from './init';
 
 const startApp = async () => {
   const rollbarConfig = {
-    accessToken: '2a15660f79934906b48e3a9a4777d1dc',
+    accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
     environment: 'testenv',
   };
 
