@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "[![Actions Status](https://github.com/Idealistnik/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Idealistnik/frontend-project-12/actions)",
+  "description": "https://hexlet-chat-pv1e.onrender.com/",
   "main": "src/index.js",
   "private": true,
   "scripts": {
