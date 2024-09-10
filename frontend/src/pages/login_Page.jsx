@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Card from 'react-bootstrap/Card';
 import Header from '../components/Header';
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../components/LoginForm.jsx';
 import BodyContainer from '../components/BodyContainer';
 import '../index.css';
 import login from '../images/login.jpeg';
