@@ -9,7 +9,7 @@ import {
   Navigate,
 }
   from 'react-router-dom';
-import LoginPage from './pages/login_Page';
+import LoginPage from './pages/LoginPage';
 import Page404 from './pages/404_Page';
 import MainPage from './pages/main_Page';
 import SignUpPage from './pages/signup_Page';
