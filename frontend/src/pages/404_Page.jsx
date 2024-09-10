@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import Header from '../components/Header.jsx';
-import BodyContainer from '../components/BodyContainer.jsx';
+import Header from '../components/header';
+import BodyContainer from '../components/bodyContainer';
 import wrongUrl from '../images/404.svg';
 
 const Page404 = () => {
