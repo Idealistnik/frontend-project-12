@@ -1,10 +1,10 @@
-import Header from '../components/Header';
-import BodyContainer from '../components/BodyContainer';
-import Channels from '../components/Channels';
-import Messages from '../components/Messages';
-import AddChannelModal from '../components/modals/AddChannelModal';
-import RemoveChannelModal from '../components/modals/RemoveChannelModal';
-import RenameChannelModal from '../components/modals/RenameChannelModal';
+import Header from '../components/Header.jsx';
+import BodyContainer from '../components/BodyContainer.jsx';
+import Channels from '../components/Channels.jsx';
+import Messages from '../components/Messages.jsx';
+import AddChannelModal from '../components/modals/AddChannelModal.jsx';
+import RemoveChannelModal from '../components/modals/RemoveChannelModal.jsx';
+import RenameChannelModal from '../components/modals/RenameChannelModal.jsx';
 
 const MainPage = () => {
   const vdom = (
