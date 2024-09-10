@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Header from '../components/Header';
 import LoginForm from '../components/LoginForm';
 import BodyContainer from '../components/BodyContainer';
+import '../index.css';
 import login from '../images/login.jpeg';
 import { selectorLoadingStatus } from '../slices/userSlice';
 
@@ -32,7 +33,7 @@ const LoginPage = () => {
                   <span>{t('login.newToChat')}</span>
                   <a
                     href="/signup"
-                    disabled={isLoading === 'loading'}
+                    className={isLoading === 'loading' ? 'disabled' : ''}
                   >
                     {t('login.signup')}
                   </a>
