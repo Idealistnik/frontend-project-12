@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-one-expression-per-line */
 import Form from 'react-bootstrap/Form';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
@@ -75,7 +74,10 @@ const Messages = () => {
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b># {currentChannelName}</b>
+            <b>
+              #&nbsp;
+              {currentChannelName}
+            </b>
           </p>
           <span className="text-muted">{t('chat.messageCount', { count: messagesCount })}</span>
         </div>
@@ -96,7 +98,9 @@ const Messages = () => {
             <ScrollToBottom className="h-100">
               {channelMessagesList.map(({ body, username, id }) => (
                 <div key={id} className="text-break mb-2">
-                  <b>{username}</b>: {body}
+                  <b>{username}</b>
+                  :&nbsp;
+                  {body}
                 </div>
               ))}
             </ScrollToBottom>

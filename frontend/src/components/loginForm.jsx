@@ -20,15 +20,15 @@ const LoginForm = () => {
   const isLoading = useSelector(selectorLoadingStatus);
   // const isLoggenIn = useSelector(selectorLoggedIn);
   const error = useSelector(selectorError);
-  const inputref = useRef(null);
+  const inputRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    inputref.current.focus();
+    inputRef.current.focus();
   }, []);
   useEffect(() => {
     if (error) {
-      inputref.current.select();
+      inputRef.current.select();
     }
   }, [error]);
 
@@ -66,7 +66,7 @@ const LoginForm = () => {
       <h1 className="text-center mb-4">{t('login.submit')}</h1>
       <Form.Group className="mb-3 form-floating">
         <Form.Control
-          ref={inputref}
+          ref={inputRef}
           name="username"
           autoComplete="username"
           required
