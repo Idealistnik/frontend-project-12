@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
 import { useFormik } from 'formik';
+// import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import setLocale from '../validation/validation';
@@ -18,10 +19,7 @@ const SignForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoading = useSelector(selectorLoadingStatus);
-  const errorCode = useSelector(selectorError);
-  // console.log('error', error);
-  // const errorCode = error ? error.status : null;
-  // console.log('errorCode =============================', errorCode);
+  const error = useSelector(selectorError);
 
   setLocale(t);
   const schema = yup.object().shape({
@@ -41,15 +39,19 @@ const SignForm = () => {
     validationSchema: schema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      try {
-        const data = { username: values.username, password: values.password };
-        await dispatch(fetchSignIn(data)).unwrap();
-        navigate('/');
-      } catch (e) {
-        console.error(e);
-      }
+      const data = { username: values.username, password: values.password };
+      await dispatch(fetchSignIn(data)).unwrap();
+      navigate('/');
     },
   });
+
+  // if (error) {
+  //   if (error === 'Network Error') {
+  //     toast.error(t('errors.network'));
+  //   } else if (error !== 409) {
+  //     toast.error(t('errors.unknown'));
+  //   }
+  // }
 
   return (
     <Form
@@ -110,9 +112,9 @@ const SignForm = () => {
         />
         <Form.Control.Feedback type="invalid" tooltip>
           {formik.errors.passwordConfirm
-          || (errorCode === 409
-            ? t('signup.alreadyExists')
-            : null)}
+            || (error === 409
+              ? t('signup.alreadyExists')
+              : null)}
         </Form.Control.Feedback>
         <Form.Label htmlFor="passwordConfirm">{t('signup.confirm')}</Form.Label>
       </Form.Group>

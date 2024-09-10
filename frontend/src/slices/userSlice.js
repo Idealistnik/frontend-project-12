@@ -18,8 +18,18 @@ export const fetchSignIn = createAsyncThunk(
       const response = await axios.post(routes.signup(), values);
       return response.data;
     } catch (error) {
+      if (error.response && error.response.status === 409) {
+        return rejectWithValue({
+          status: error.response.status,
+        });
+      }
+      if (!error.response) {
+        return rejectWithValue({
+          status: 'Network Error',
+        });
+      }
       return rejectWithValue({
-        status: error.response.status,
+        status: 'Unknown error',
       });
     }
   },
