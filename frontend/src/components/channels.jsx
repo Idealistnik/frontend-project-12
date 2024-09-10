@@ -3,34 +3,22 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { PlusSquare } from 'react-bootstrap-icons';
-import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 import {
   setChannels,
   channelsSelectors,
-  setChannelToRemove,
-  setChannelToRename,
-  getUnchangingChannelsIds,
 } from '../slices/channelSlice';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
 import routes from '../routes/routes';
-import {
-  setPressedChannel,
-  getPressedChannelId,
-  setPressedAddChannel,
-  setPressedRemoveChannel,
-  setPressedRenameChannel,
-} from '../slices/uiSlice';
+import { setPressedAddChannel } from '../slices/uiSlice';
+import Channel from './channel';
 
 const Channels = () => {
   const { t } = useTranslation();
   const isLoggedIn = useSelector(selectorLoggedIn);
   const channelList = useSelector(channelsSelectors.selectAll);
   const [currentToken] = useSelector(getUserInfo);
-  const currentChannelId = useSelector(getPressedChannelId);
-  const unchangedChannels = useSelector(getUnchangingChannelsIds);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,22 +35,8 @@ const Channels = () => {
     }
   }, [dispatch, channelList, currentToken, isLoggedIn]);
 
-  const handleClick = (id) => {
-    dispatch(setPressedChannel(+id));
-  };
-
   const handleClickAddChannel = () => {
     dispatch(setPressedAddChannel(true));
-  };
-
-  const handleRemoveChannel = (currentId) => {
-    dispatch(setPressedRemoveChannel(true));
-    dispatch(setChannelToRemove(+currentId));
-  };
-
-  const handleRenameChannel = (currentId) => {
-    dispatch(setPressedRenameChannel(true));
-    dispatch(setChannelToRename(+currentId));
   };
 
   const vdom = (
@@ -86,44 +60,7 @@ const Channels = () => {
         className="flex-column nav-fill px-2 mb-3 overflow-auto h-100 d-block"
       >
         {channelList.map(({ id, name }) => (
-          <Nav.Item as="li" key={id} className="w-100">
-            <Dropdown as={ButtonGroup} className="d-flex">
-              <Button
-                variant={currentChannelId === +id ? 'secondary' : ''}
-                onClick={() => handleClick(id)}
-                className="w-100 rounded-0 text-start text-truncate"
-              >
-                <span className="me-1">#</span>
-                {name}
-              </Button>
-
-              {unchangedChannels.includes(+id) ? null : (
-                <>
-                  <Dropdown.Toggle
-                    split
-                    variant={currentChannelId === +id ? 'secondary' : ''}
-                    id="dropdown-split-basic"
-                    className="flex-grow-0"
-                  >
-                    <span className="visually-hidden">{t('channels.menu')}</span>
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      onClick={() => handleRemoveChannel(id)}
-                    >
-                      {t('channels.remove')}
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() => handleRenameChannel(id)}
-                    >
-                      {t('channels.rename')}
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </>
-              )}
-            </Dropdown>
-          </Nav.Item>
+          <Channel key={id} id={id} name={name} t={t} />
         ))}
       </Nav>
     </div>
