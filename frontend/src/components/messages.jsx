@@ -1,9 +1,6 @@
-import Form from 'react-bootstrap/Form';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
-import { ArrowRightSquare } from 'react-bootstrap-icons';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';
@@ -20,6 +17,7 @@ import {
 import routes from '../routes/routes';
 import { channelsSelectors } from '../slices/channelSlice';
 import { getPressedChannelId } from '../slices/uiSlice';
+import MessageForm from './messageForm';
 
 const Messages = () => {
   const { t } = useTranslation();
@@ -107,36 +105,7 @@ const Messages = () => {
           )}
         </div>
         <div className="mt-auto px-5 py-3">
-          <Form
-            className="py-1 border rounded-2"
-            noValidate
-            onSubmit={formik.handleSubmit}
-          >
-            <Form.Group className="input-group has-validation">
-              <Form.Control
-                ref={inputRef}
-                aria-label={t('chat.newMessage')}
-                name="inputValue"
-                className="border-0 p-0 ps-2"
-                required
-                id="username"
-                type="text"
-                placeholder={t('chat.inputMessage')}
-                onChange={formik.handleChange}
-                value={formik.values.inputValue}
-                autoComplete="off"
-              />
-              <Button
-                type="submit"
-                variant=""
-                className="btn-group-vertical"
-                disabled={formik.values.inputValue === ''}
-              >
-                <ArrowRightSquare width="20" height="20" />
-                <span className="visually-hidden">{t('chat.send')}</span>
-              </Button>
-            </Form.Group>
-          </Form>
+          <MessageForm formik={formik} inputRef={inputRef} t={t} />
         </div>
       </div>
     </div>
