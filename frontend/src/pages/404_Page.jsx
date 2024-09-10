@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import Header from '../components/header';
-import BodyContainer from '../components/bodyContainer';
+import Header from '../components/Header';
+import BodyContainer from '../components/BodyContainer';
 import wrongUrl from '../images/404.svg';
 
 const Page404 = () => {
@@ -12,7 +12,7 @@ const Page404 = () => {
         <img
           src={wrongUrl}
           className="img-fluid h-25"
-          alt="Страница не найдена"
+          alt={t('notFound.header')}
         />
         <h1 className="h4 text-muted">{t('notFound.header')}</h1>
         <p className="text-muted">

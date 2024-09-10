@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Card from 'react-bootstrap/Card';
-import Header from '../components/header';
-import LoginForm from '../components/loginForm';
-import BodyContainer from '../components/bodyContainer';
+import Header from '../components/Header';
+import LoginForm from '../components/LoginForm';
+import BodyContainer from '../components/BodyContainer';
 import login from '../images/login.jpeg';
 import { selectorLoadingStatus } from '../slices/userSlice';
 

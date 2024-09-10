@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import Card from 'react-bootstrap/Card';
-import Header from '../components/header';
-import SignForm from '../components/signForm';
-import BodyContainer from '../components/bodyContainer';
+import Header from '../components/Header';
+import SignForm from '../components/SignForm';
+import BodyContainer from '../components/BodyContainer';
 import signup from '../images/signup.jpg';
 
 const SignUpPage = () => {

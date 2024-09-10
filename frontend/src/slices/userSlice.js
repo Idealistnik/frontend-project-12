@@ -45,14 +45,12 @@ const userSlice = createSlice({
     setUserInfo: (state, action) => {
       state.userInfo = action.payload;
     },
-    removeUserInfo: (state) => {
-      state.userInfo = {};
-    },
     setLoggedIn: (state) => {
       state.loggedIn = true;
     },
     setLoggedOut: (state) => {
       state.loggedIn = false;
+      state.userInfo = {};
       localStorage.clear();
     },
   },
@@ -93,7 +91,6 @@ const userSlice = createSlice({
 
 export const {
   setUserInfo,
-  removeUserInfo,
   setLoggedIn,
   setLoggedOut,
   setUserInfoToStorage,
