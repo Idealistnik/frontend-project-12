@@ -12,6 +12,7 @@ import {
   channelsSelectors,
   setChannelToRemove,
   setChannelToRename,
+  getUnchangingChannelsIds,
 } from '../slices/channelSlice';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
 import routes from '../routes/routes';
@@ -29,6 +30,7 @@ const Channels = () => {
   const channelList = useSelector(channelsSelectors.selectAll);
   const [currentToken] = useSelector(getUserInfo);
   const currentChannelId = useSelector(getPressedChannelId);
+  const unchangedChannels = useSelector(getUnchangingChannelsIds);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -95,7 +97,7 @@ const Channels = () => {
                 {name}
               </Button>
 
-              {+id === 1 || +id === 2 ? null : (
+              {unchangedChannels.includes(+id) ? null : (
                 <>
                   <Dropdown.Toggle
                     split

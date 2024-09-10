@@ -11,4 +11,5 @@ export default configureStore({
     [messagesSlice.name]: messagesSlice.reducer,
     [uiSlice.name]: uiSlice.reducer,
   },
+  devTools: process.env.NODE_ENV !== 'production',
 });
