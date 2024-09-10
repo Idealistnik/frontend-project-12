@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
 import { useFormik } from 'formik';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import setLocale from '../validation/validation';
@@ -45,13 +45,13 @@ const SignForm = () => {
     },
   });
 
-  // if (error) {
-  //   if (error === 'Network Error') {
-  //     toast.error(t('errors.network'));
-  //   } else if (error !== 409) {
-  //     toast.error(t('errors.unknown'));
-  //   }
-  // }
+  if (error) {
+    if (error === 'Network Error') {
+      toast.error(t('errors.network'));
+    } else if (error !== 409) {
+      toast.error(t('errors.unknown'));
+    }
+  }
 
   return (
     <Form
@@ -106,7 +106,7 @@ const SignForm = () => {
           value={formik.values.passwordConfirm}
           isInvalid={
             (formik.errors.passwordConfirm && formik.touched.passwordConfirm)
-            || isLoading === 'failed'
+            || error === 409
           }
           disabled={isLoading === 'loading'}
         />
