@@ -10,7 +10,6 @@ import { selectorLoadingStatus } from '../slices/userSlice';
 const LoginPage = () => {
   const { t } = useTranslation();
   const isLoading = useSelector(selectorLoadingStatus);
-  const handleResetLocalStorage = () => localStorage.clear();
   return (
     <BodyContainer>
       <Header />
@@ -34,7 +33,6 @@ const LoginPage = () => {
                   <a
                     href="/signup"
                     disabled={isLoading === 'loading'}
-                    onClick={handleResetLocalStorage}
                   >
                     {t('login.signup')}
                   </a>
