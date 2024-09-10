@@ -18,8 +18,10 @@ const SignForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoading = useSelector(selectorLoadingStatus);
-  const error = useSelector(selectorError);
-  const errorMessage = error ? error.message : null;
+  const errorCode = useSelector(selectorError);
+  // console.log('error', error);
+  // const errorCode = error ? error.status : null;
+  // console.log('errorCode =============================', errorCode);
 
   setLocale(t);
   const schema = yup.object().shape({
@@ -108,7 +110,7 @@ const SignForm = () => {
         />
         <Form.Control.Feedback type="invalid" tooltip>
           {formik.errors.passwordConfirm
-          || (errorMessage === 'Request failed with status code 409'
+          || (errorCode === 409
             ? t('signup.alreadyExists')
             : null)}
         </Form.Control.Feedback>

@@ -13,9 +13,17 @@ export const fetchLogin = createAsyncThunk(
 
 export const fetchSignIn = createAsyncThunk(
   'user/fetchSignIn',
-  async (values) => {
-    const response = await axios.post(routes.signup(), values);
-    return response.data;
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(routes.signup(), values);
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 409) {
+        return rejectWithValue({
+          status: error.response.status,
+        });
+      }
+    }
   },
 );
 
@@ -84,7 +92,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchSignIn.rejected, (state, action) => {
         state.loadingStatus = 'failed';
-        state.error = action.error;
+        state.error = action.payload.status;
       });
   },
 });
