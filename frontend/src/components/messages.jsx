@@ -138,7 +138,7 @@ const Messages = () => {
     </div>
   );
 
-  return localStorage.length === 0 ? null : vdom;
+  return vdom;
 };
 
 export default Messages;

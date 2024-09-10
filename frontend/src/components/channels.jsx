@@ -127,7 +127,7 @@ const Channels = () => {
     </div>
   );
 
-  return localStorage.length === 0 ? null : vdom;
+  return vdom;
 };
 
 export default Channels;
