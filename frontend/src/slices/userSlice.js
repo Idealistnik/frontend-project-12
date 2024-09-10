@@ -18,11 +18,9 @@ export const fetchSignIn = createAsyncThunk(
       const response = await axios.post(routes.signup(), values);
       return response.data;
     } catch (error) {
-      if (error.response.status === 409) {
-        return rejectWithValue({
-          status: error.response.status,
-        });
-      }
+      return rejectWithValue({
+        status: error.response.status,
+      });
     }
   },
 );
