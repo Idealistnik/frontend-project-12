@@ -5,9 +5,25 @@ import routes from '../routes/routes';
 
 export const fetchLogin = createAsyncThunk(
   'user/fetchLogin',
-  async (values) => {
-    const response = await axios.post(routes.login(), values);
-    return response.data;
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(routes.login(), values);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        return rejectWithValue({
+          status: error.response.status,
+        });
+      }
+      if (!error.response) {
+        return rejectWithValue({
+          status: 'Network Error',
+        });
+      }
+      return rejectWithValue({
+        status: 'Unknown error',
+      });
+    }
   },
 );
 
@@ -85,7 +101,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchLogin.rejected, (state, action) => {
         state.loadingStatus = 'failed';
-        state.error = action.error;
+        state.error = action.payload.status;
       })
       .addCase(fetchSignIn.pending, (state) => {
         state.loadingStatus = 'loading';

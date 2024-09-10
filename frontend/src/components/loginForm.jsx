@@ -1,6 +1,7 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Spinner } from 'react-bootstrap';
@@ -9,18 +10,27 @@ import { useNavigate } from 'react-router-dom';
 import {
   fetchLogin,
   selectorLoadingStatus,
+  // selectorLoggedIn,
+  selectorError,
 } from '../slices/userSlice';
 
 const LoginForm = () => {
   const { t } = useTranslation();
-  const [authFailed, setAuthFailed] = useState(false);
+  // const [authFailed, setAuthFailed] = useState(false);
   const isLoading = useSelector(selectorLoadingStatus);
+  // const isLoggenIn = useSelector(selectorLoggedIn);
+  const error = useSelector(selectorError);
   const inputref = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
     inputref.current.focus();
   }, []);
+  useEffect(() => {
+    if (error) {
+      inputref.current.select();
+    }
+  }, [error]);
 
   const formik = useFormik({
     initialValues: {
@@ -28,17 +38,25 @@ const LoginForm = () => {
       password: '',
     },
     onSubmit: async (values) => {
-      setAuthFailed(false);
-      try {
-        await dispatch(fetchLogin(values))
-          .unwrap();
-        navigate('/');
-      } catch (error) {
-        setAuthFailed(true);
-        inputref.current.select();
-      }
+      // setAuthFailed(false);
+      // try {
+      await dispatch(fetchLogin(values))
+        .unwrap();
+      navigate('/');
+      // } catch (error) {
+      // setAuthFailed(true);
+      // inputref.current.select();
+      // }
     },
   });
+
+  if (error) {
+    if (error === 'Network Error') {
+      toast.error(t('errors.network'));
+    } else if (error !== 401) {
+      toast.error(t('errors.unknown'));
+    }
+  }
 
   return (
     <Form
@@ -56,7 +74,7 @@ const LoginForm = () => {
           placeholder={t('login.username')}
           onChange={formik.handleChange}
           value={formik.values.username}
-          isInvalid={authFailed}
+          isInvalid={error === 401}
           disabled={isLoading === 'loading'}
         />
         <Form.Label htmlFor="username">{t('login.username')}</Form.Label>
@@ -71,7 +89,7 @@ const LoginForm = () => {
           id="password"
           onChange={formik.handleChange}
           value={formik.values.password}
-          isInvalid={authFailed}
+          isInvalid={error === 401}
           disabled={isLoading === 'loading'}
         />
         <Form.Control.Feedback type="invalid" tooltip>
