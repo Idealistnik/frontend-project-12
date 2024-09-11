@@ -35,6 +35,8 @@ const AddChannelModal = () => {
       inputValue: '',
     },
     validationSchema: schema,
+    validateOnBlur: false,
+    validateOnChange: false,
     onSubmit: async (values, { resetForm }) => {
       const currentValue = leoProfanity.clean(values.inputValue);
       const newChannel = { name: currentValue };
@@ -79,7 +81,6 @@ const AddChannelModal = () => {
               required
               onChange={formik.handleChange}
               value={formik.values.inputValue}
-              onBlur={formik.handleBlur}
               autoComplete="off"
               isInvalid={formik.errors.inputValue && formik.touched.inputValue}
             />

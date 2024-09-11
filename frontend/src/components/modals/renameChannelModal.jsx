@@ -50,6 +50,8 @@ const RenameChannelModal = () => {
       inputValue: channelName,
     },
     validationSchema: schema,
+    validateOnBlur: false,
+    validateOnChange: false,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
       const currentValue = values.inputValue;
@@ -120,7 +122,6 @@ const RenameChannelModal = () => {
                 autoFocus
                 required
                 value={formik.values.inputValue}
-                onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 autoComplete="off"
                 isInvalid={
