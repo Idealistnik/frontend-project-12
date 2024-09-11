@@ -71,15 +71,15 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserInfoToStorage: (state, action) => {
-      localStorage.setItem(action.payload.username, action.payload.token);
-    },
-    setUserInfo: (state, action) => {
-      state.userInfo = action.payload;
-    },
-    setLoggedIn: (state) => {
-      state.loggedIn = true;
-    },
+    // setUserInfoToStorage: (state, action) => {
+    //   localStorage.setItem(action.payload.username, action.payload.token);
+    // },
+    // setUserInfo: (state, action) => {
+    //   state.userInfo = action.payload;
+    // },
+    // setLoggedIn: (state) => {
+    //   state.loggedIn = true;
+    // },
     setLoggedOut: (state) => {
       state.loggedIn = false;
       state.userInfo = {};
@@ -122,10 +122,10 @@ const userSlice = createSlice({
 });
 
 export const {
-  setUserInfo,
-  setLoggedIn,
+  // setUserInfo,
+  // setLoggedIn,
   setLoggedOut,
-  setUserInfoToStorage,
+  // setUserInfoToStorage,
 } = userSlice.actions;
 export const selectorLoggedIn = (state) => state.user.loggedIn;
 export const selectorLoadingStatus = (state) => state.user.loadingStatus;

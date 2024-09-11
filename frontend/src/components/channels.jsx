@@ -59,8 +59,8 @@ const Channels = () => {
         defaultActiveKey=""
         className="flex-column nav-fill px-2 mb-3 overflow-auto h-100 d-block"
       >
-        {channelList.map(({ id, name }) => (
-          <Channel key={id} id={id} name={name} t={t} />
+        {channelList.map(({ id, name, removable }) => (
+          <Channel key={id} id={id} name={name} t={t} removable={removable} />
         ))}
       </Nav>
     </div>

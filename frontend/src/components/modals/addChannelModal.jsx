@@ -25,8 +25,9 @@ const AddChannelModal = () => {
   const channels = useSelector(channelsSelectors.selectAll);
   const channelsNames = channels.map((channel) => channel.name);
   const [currentToken] = useSelector(getUserInfo);
-  const handleClickCloseModal = () => {
+  const handleClickCloseModal = ({ resetForm }) => {
     dispatch(setPressedAddChannel(false));
+    resetForm();
   };
   setLocale(t);
   const schema = getSchemaChannels(channelsNames);
@@ -49,7 +50,7 @@ const AddChannelModal = () => {
         dispatch(addChannel(response.data));
         dispatch(setPressedChannel(+response.data.id));
         resetForm();
-        handleClickCloseModal();
+        handleClickCloseModal(formik);
         toast.success(t('channels.created'));
       } catch (e) {
         if (e.message === 'Network Error') {
@@ -62,7 +63,7 @@ const AddChannelModal = () => {
   });
 
   return (
-    <Modal show={isPressedAddChannel} onHide={handleClickCloseModal} centered>
+    <Modal show={isPressedAddChannel} onHide={() => handleClickCloseModal(formik)} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('modals.add')}</Modal.Title>
       </Modal.Header>
@@ -95,7 +96,7 @@ const AddChannelModal = () => {
       <Modal.Footer>
         <Button
           variant="secondary"
-          onClick={handleClickCloseModal}
+          onClick={() => handleClickCloseModal(formik)}
         >
           {t('modals.cancel')}
         </Button>

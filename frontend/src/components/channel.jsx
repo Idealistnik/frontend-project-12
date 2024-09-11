@@ -6,7 +6,6 @@ import Nav from 'react-bootstrap/Nav';
 import {
   setChannelToRemove,
   setChannelToRename,
-  getUnchangingChannelsIds,
 } from '../slices/channelSlice';
 import {
   setPressedChannel,
@@ -15,9 +14,15 @@ import {
   setPressedRenameChannel,
 } from '../slices/uiSlice';
 
-const Channel = ({ id, name, t }) => {
+const Channel = (
+  {
+    id,
+    name,
+    t,
+    removable,
+  },
+) => {
   const dispatch = useDispatch();
-  const unchangedChannels = useSelector(getUnchangingChannelsIds);
   const currentChannelId = useSelector(getPressedChannelId);
   const handleClick = (currentId) => {
     dispatch(setPressedChannel(+currentId));
@@ -43,7 +48,7 @@ const Channel = ({ id, name, t }) => {
           {name}
         </Button>
 
-        {unchangedChannels.includes(+id) ? null : (
+        {!removable ? null : (
           <>
             <Dropdown.Toggle
               split

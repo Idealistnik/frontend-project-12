@@ -26,7 +26,6 @@ const messagesSlice = createSlice({
   reducers: {
     addMessage: messagesAdapter.addOne,
     setMessages: messagesAdapter.addMany,
-    removeMessages: messagesAdapter.removeAll,
     removeMessage: (state, action) => {
       messagesAdapter.removeOne(state, action.payload);
     },
@@ -58,7 +57,6 @@ const messagesSlice = createSlice({
 export const {
   addMessage,
   setMessages,
-  removeMessages,
   removeMessage,
 } = messagesSlice.actions;
 export const messagesSelectors = messagesAdapter.getSelectors((state) => state.messages);
