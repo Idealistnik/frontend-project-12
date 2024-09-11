@@ -50,8 +50,8 @@ const RenameChannelModal = () => {
       inputValue: channelName,
     },
     validationSchema: schema,
-    validateOnBlur: false,
-    validateOnChange: false,
+    // validateOnBlur: false,
+    // validateOnChange: false,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
       const currentValue = values.inputValue;

@@ -14,12 +14,13 @@ import Page404 from './pages/404_Page';
 import MainPage from './pages/main_Page';
 import SignUpPage from './pages/signup_Page';
 import { selectorLoggedIn } from './slices/userSlice';
+import routes from './routes/routes';
 
 const MainRoute = ({ children }) => {
   const isLoggedIn = useSelector(selectorLoggedIn);
 
   return (
-    isLoggedIn ? children : <Navigate to="/login" />
+    isLoggedIn ? children : <Navigate to={routes.loginPage()} />
   );
 };
 
@@ -27,7 +28,7 @@ const LoginRoute = ({ children }) => {
   const isLoggedIn = useSelector(selectorLoggedIn);
 
   return (
-    isLoggedIn ? <Navigate to="/" /> : children
+    isLoggedIn ? <Navigate to={routes.mainPage()} /> : children
   );
 };
 
@@ -36,7 +37,7 @@ const App = () => (
     <Routes>
 
       <Route
-        path="/login"
+        path={routes.loginPage()}
         element={(
           <LoginRoute>
             <LoginPage />
@@ -45,7 +46,7 @@ const App = () => (
       />
 
       <Route
-        path="/"
+        path={routes.mainPage()}
         element={(
           <MainRoute>
             <MainPage />
@@ -53,8 +54,8 @@ const App = () => (
         )}
       />
 
-      <Route path="*" element={<Page404 />} />
-      <Route path="/signup" element={<SignUpPage />} />
+      <Route path={routes.page404()} element={<Page404 />} />
+      <Route path={routes.signupPage()} element={<SignUpPage />} />
 
     </Routes>
     <ToastContainer />

@@ -6,4 +6,8 @@ export default {
   channels: () => [host, 'channels'].join('/'),
   editChannel: (id) => [host, 'channels', id].join('/'),
   messages: () => [host, 'messages'].join('/'),
+  mainPage: () => '/',
+  signupPage: () => '/signup',
+  loginPage: () => '/login',
+  page404: () => '*',
 };

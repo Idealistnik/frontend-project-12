@@ -10,15 +10,13 @@ import { useNavigate } from 'react-router-dom';
 import {
   fetchLogin,
   selectorLoadingStatus,
-  // selectorLoggedIn,
   selectorError,
 } from '../slices/userSlice';
+import routes from '../routes/routes';
 
 const LoginForm = () => {
   const { t } = useTranslation();
-  // const [authFailed, setAuthFailed] = useState(false);
   const isLoading = useSelector(selectorLoadingStatus);
-  // const isLoggenIn = useSelector(selectorLoggedIn);
   const error = useSelector(selectorError);
   const inputRef = useRef(null);
   const dispatch = useDispatch();
@@ -38,25 +36,21 @@ const LoginForm = () => {
       password: '',
     },
     onSubmit: async (values) => {
-      // setAuthFailed(false);
-      // try {
       await dispatch(fetchLogin(values))
         .unwrap();
-      navigate('/');
-      // } catch (error) {
-      // setAuthFailed(true);
-      // inputref.current.select();
-      // }
+      navigate(routes.mainPage());
     },
   });
 
-  if (error) {
-    if (error === 'Network Error') {
-      toast.error(t('errors.network'));
-    } else if (error !== 401) {
-      toast.error(t('errors.unknown'));
+  useEffect(() => {
+    if (error) {
+      if (error === 'Network Error') {
+        toast.error(t('errors.network'));
+      } else if (error !== 401) {
+        toast.error(t('errors.unknown'));
+      }
     }
-  }
+  }, [error, t]);
 
   return (
     <Form

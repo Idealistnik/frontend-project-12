@@ -8,6 +8,7 @@ import {
   selectorLoggedIn,
   setLoggedOut,
 } from '../slices/userSlice';
+import routes from '../routes/routes';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ const Header = () => {
   return (
     <Navbar className="bg-white shadow-sm" expand="lg">
       <Container>
-        <Navbar.Brand href="/">{t('hexletChat')}</Navbar.Brand>
+        <Navbar.Brand href={routes.mainPage()}>{t('hexletChat')}</Navbar.Brand>
         <ButtonGroup>
           <Button onClick={handleLogOut} className={classes}>
             {t('logout')}

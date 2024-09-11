@@ -7,6 +7,7 @@ import BodyContainer from '../components/bodyContainer';
 import '../index.css';
 import login from '../images/login.jpeg';
 import { selectorLoadingStatus } from '../slices/userSlice';
+import routes from '../routes/routes';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ const LoginPage = () => {
                 <div className="text-center">
                   <span>{t('login.newToChat')}</span>
                   <a
-                    href="/signup"
+                    href={routes.signupPage()}
                     className={isLoading === 'loading' ? 'disabled' : ''}
                   >
                     {t('login.signup')}

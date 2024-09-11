@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -13,6 +14,7 @@ import {
   selectorLoadingStatus,
   selectorError,
 } from '../slices/userSlice';
+import routes from '../routes/routes';
 
 const SignForm = () => {
   const { t } = useTranslation();
@@ -41,17 +43,18 @@ const SignForm = () => {
     onSubmit: async (values) => {
       const data = { username: values.username, password: values.password };
       await dispatch(fetchSignIn(data)).unwrap();
-      navigate('/');
+      navigate(routes.mainPage());
     },
   });
-
-  if (error) {
-    if (error === 'Network Error') {
-      toast.error(t('errors.network'));
-    } else if (error !== 409) {
-      toast.error(t('errors.unknown'));
+  useEffect(() => {
+    if (error) {
+      if (error === 'Network Error') {
+        toast.error(t('errors.network'));
+      } else if (error !== 409) {
+        toast.error(t('errors.unknown'));
+      }
     }
-  }
+  }, [error, t]);
 
   return (
     <Form
