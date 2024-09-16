@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import setLocale from '../validation/validation';
 import {
   fetchSignIn,
-  selectorLoadingStatus,
   selectorError,
 } from '../slices/userSlice';
 import routes from '../routes/routes';
@@ -20,7 +19,6 @@ const SignForm = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoading = useSelector(selectorLoadingStatus);
   const error = useSelector(selectorError);
 
   setLocale(t);
@@ -72,7 +70,7 @@ const SignForm = () => {
           onChange={formik.handleChange}
           value={formik.values.username}
           isInvalid={formik.errors.username && formik.touched.username}
-          disabled={isLoading === 'loading'}
+          disabled={formik.isSubmitting}
         />
         <Form.Control.Feedback type="invalid" tooltip>
           {formik.errors.username ? formik.errors.username : null}
@@ -90,7 +88,7 @@ const SignForm = () => {
           onChange={formik.handleChange}
           value={formik.values.password}
           isInvalid={formik.errors.password && formik.touched.password}
-          disabled={isLoading === 'loading'}
+          disabled={formik.isSubmitting}
         />
         <Form.Control.Feedback type="invalid" tooltip>
           {formik.errors.password ? formik.errors.password : null}
@@ -111,7 +109,7 @@ const SignForm = () => {
             (formik.errors.passwordConfirm && formik.touched.passwordConfirm)
             || error === 409
           }
-          disabled={isLoading === 'loading'}
+          disabled={formik.isSubmitting}
         />
         <Form.Control.Feedback type="invalid" tooltip>
           {formik.errors.passwordConfirm
@@ -125,11 +123,11 @@ const SignForm = () => {
         type="submit"
         variant="outline-primary"
         className="w-100 mb-3"
-        disabled={isLoading === 'loading'}
+        disabled={formik.isSubmitting}
       >
         {t('signup.submit')}
       </Button>
-      {isLoading === 'loading' ? (
+      {formik.isSubmitting ? (
         <div
           className="d-flex justify-content-center align-items-center w-100"
           style={{ flexGrow: 1 }}

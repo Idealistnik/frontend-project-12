@@ -33,13 +33,13 @@ const Channels = () => {
       };
       getChannels().then((data) => dispatch(setChannels(data)));
     }
-  }, [dispatch, channelList, currentToken, isLoggedIn]);
+  }, [dispatch, currentToken, isLoggedIn]);
 
   const handleClickAddChannel = () => {
     dispatch(setPressedAddChannel(true));
   };
 
-  const vdom = (
+  return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>{t('channels.channels')}</b>
@@ -59,14 +59,12 @@ const Channels = () => {
         defaultActiveKey=""
         className="flex-column nav-fill px-2 mb-3 overflow-auto h-100 d-block"
       >
-        {channelList.map(({ id, name, removable }) => (
-          <Channel key={id} id={id} name={name} t={t} removable={removable} />
+        {channelList.map((channel) => (
+          <Channel key={channel.id} t={t} channel={channel} />
         ))}
       </Nav>
     </div>
   );
-
-  return vdom;
 };
 
 export default Channels;

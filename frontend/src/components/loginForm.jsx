@@ -9,14 +9,12 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import {
   fetchLogin,
-  selectorLoadingStatus,
   selectorError,
 } from '../slices/userSlice';
 import routes from '../routes/routes';
 
 const LoginForm = () => {
   const { t } = useTranslation();
-  const isLoading = useSelector(selectorLoadingStatus);
   const error = useSelector(selectorError);
   const inputRef = useRef(null);
   const dispatch = useDispatch();
@@ -69,7 +67,7 @@ const LoginForm = () => {
           onChange={formik.handleChange}
           value={formik.values.username}
           isInvalid={error === 401}
-          disabled={isLoading === 'loading'}
+          disabled={formik.isSubmitting}
         />
         <Form.Label htmlFor="username">{t('login.username')}</Form.Label>
       </Form.Group>
@@ -84,7 +82,7 @@ const LoginForm = () => {
           onChange={formik.handleChange}
           value={formik.values.password}
           isInvalid={error === 401}
-          disabled={isLoading === 'loading'}
+          disabled={formik.isSubmitting}
         />
         <Form.Control.Feedback type="invalid" tooltip>
           {t('login.authFailed')}
@@ -95,11 +93,11 @@ const LoginForm = () => {
         type="submit"
         variant="outline-primary"
         className="w-100 mb-3"
-        disabled={isLoading === 'loading'}
+        disabled={formik.isSubmitting}
       >
         {t('login.submit')}
       </Button>
-      {isLoading === 'loading' ? (
+      {formik.isSubmitting ? (
         <div
           className="d-flex justify-content-center align-items-center w-100"
           style={{ flexGrow: 1 }}

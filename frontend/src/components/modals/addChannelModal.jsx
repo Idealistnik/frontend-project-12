@@ -64,7 +64,7 @@ const AddChannelModal = () => {
 
   return (
     <Modal show={isPressedAddChannel} onHide={() => handleClickCloseModal(formik)} centered>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton={!formik.isSubmitting}>
         <Modal.Title>{t('modals.add')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -97,6 +97,7 @@ const AddChannelModal = () => {
         <Button
           variant="secondary"
           onClick={() => handleClickCloseModal(formik)}
+          disabled={formik.isSubmitting}
         >
           {t('modals.cancel')}
         </Button>
@@ -105,6 +106,7 @@ const AddChannelModal = () => {
           type="submit"
           variant="primary"
           onClick={formik.handleSubmit}
+          disabled={formik.isSubmitting}
         >
           {t('modals.submit')}
         </Button>

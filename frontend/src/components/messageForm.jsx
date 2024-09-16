@@ -26,7 +26,7 @@ const MessageForm = ({ formik, inputRef, t }) => (
         type="submit"
         variant=""
         className="btn-group-vertical"
-        disabled={formik.values.inputValue === ''}
+        disabled={formik.values.inputValue === '' || formik.isSubmitting}
       >
         <ArrowRightSquare width="20" height="20" />
         <span className="visually-hidden">{t('chat.send')}</span>
