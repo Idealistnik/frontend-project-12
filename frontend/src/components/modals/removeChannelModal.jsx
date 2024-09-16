@@ -34,12 +34,12 @@ const RemoveChannelModal = () => {
 
   const handleRemoveChannel = async (id) => {
     try {
-      const respose = await axios.delete(routes.editChannel(id), {
+      const response = await axios.delete(routes.editChannel(id), {
         headers: {
           Authorization: `Bearer ${currentToken}`,
         },
       });
-      const removeId = respose.data.id;
+      const removeId = response.data.id;
       dispatch(removeChannel(removeId));
       dispatch(setPressedChannel(defaultChannelId));
       dispatch(setChannelToRemove(null));

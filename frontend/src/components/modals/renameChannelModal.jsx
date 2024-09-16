@@ -50,8 +50,6 @@ const RenameChannelModal = () => {
       inputValue: channelName,
     },
     validationSchema: schema,
-    // validateOnBlur: false,
-    // validateOnChange: false,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
       const currentValue = values.inputValue;
@@ -98,56 +96,57 @@ const RenameChannelModal = () => {
     getSelected();
   }, [isPressedRenameChannel]);
 
-  if (channelName) {
-    return (
-      <Modal
-        show={isPressedRenameChannel}
-        onHide={handleClickCloseModal}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{t('modals.rename')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={formik.handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label visuallyHidden htmlFor="inputValue">
-                {t('modals.channelName')}
-              </Form.Label>
-              <Form.Control
-                ref={inputRenameRef}
-                type="text"
-                name="inputValue"
-                id="inputValue"
-                autoFocus
-                required
-                value={formik.values.inputValue}
-                onChange={formik.handleChange}
-                autoComplete="off"
-                isInvalid={
-                  formik.errors.inputValue && formik.touched.inputValue
-                }
-              />
-              <Form.Control.Feedback type="invalid">
-                {formik.errors.inputValue && formik.touched.inputValue
-                  ? formik.errors.inputValue
-                  : null}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClickCloseModal}>
-            {t('modals.cancel')}
-          </Button>
-          <Button variant="primary" type="submit" onClick={formik.handleSubmit}>
-            {t('modals.submit')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-  return null;
+  return (
+    <Modal
+      show={isPressedRenameChannel}
+      onHide={handleClickCloseModal}
+      centered
+    >
+      <Modal.Header closeButton={!formik.isSubmitting}>
+        <Modal.Title>{t('modals.rename')}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={formik.handleSubmit}>
+          <Form.Group>
+            <Form.Label visuallyHidden htmlFor="inputValue">
+              {t('modals.channelName')}
+            </Form.Label>
+            <Form.Control
+              className="mb-2"
+              ref={inputRenameRef}
+              type="text"
+              name="inputValue"
+              id="inputValue"
+              autoFocus
+              required
+              value={formik.values.inputValue}
+              onChange={formik.handleChange}
+              autoComplete="off"
+              disabled={formik.isSubmitting}
+              isInvalid={
+                formik.errors.inputValue && formik.touched.inputValue
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.inputValue && formik.touched.inputValue
+                ? formik.errors.inputValue
+                : null}
+            </Form.Control.Feedback>
+            <div className="d-flex justify-content-end">
+              <Button variant="secondary" className="me-2" onClick={handleClickCloseModal} disabled={formik.isSubmitting}>
+                {t('modals.cancel')}
+              </Button>
+              <Button variant="primary" type="submit" onClick={formik.handleSubmit} disabled={formik.isSubmitting}>
+                {t('modals.submit')}
+              </Button>
+            </div>
+
+          </Form.Group>
+
+        </Form>
+      </Modal.Body>
+    </Modal>
+  );
 };
 
 export default RenameChannelModal;

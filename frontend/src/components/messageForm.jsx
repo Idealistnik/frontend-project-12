@@ -15,7 +15,7 @@ const MessageForm = ({ formik, inputRef, t }) => (
         name="inputValue"
         className="border-0 p-0 ps-2"
         required
-        id="username"
+        id="inputValue"
         type="text"
         placeholder={t('chat.inputMessage')}
         onChange={formik.handleChange}

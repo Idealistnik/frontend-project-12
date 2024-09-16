@@ -90,27 +90,27 @@ const AddChannelModal = () => {
                 ? formik.errors.inputValue
                 : null}
             </Form.Control.Feedback>
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="secondary"
+                className="me-2"
+                onClick={() => handleClickCloseModal(formik)}
+                disabled={formik.isSubmitting}
+              >
+                {t('modals.cancel')}
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                onClick={formik.handleSubmit}
+                disabled={formik.isSubmitting}
+              >
+                {t('modals.submit')}
+              </Button>
+            </div>
           </Form.Group>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="secondary"
-          onClick={() => handleClickCloseModal(formik)}
-          disabled={formik.isSubmitting}
-        >
-          {t('modals.cancel')}
-        </Button>
-        <Button
-          className="me-2"
-          type="submit"
-          variant="primary"
-          onClick={formik.handleSubmit}
-          disabled={formik.isSubmitting}
-        >
-          {t('modals.submit')}
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

@@ -24,6 +24,7 @@ const Messages = () => {
   const isLoggedIn = useSelector(selectorLoggedIn);
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentChannelId = useSelector(getPressedChannelId);
+  // const channels = useSelector(channelsSelectors.selectAll);
   const currentChannel = useSelector((state) => channelsSelectors
     .selectById(state, currentChannelId));
   const currentChannelName = currentChannel?.name;
@@ -36,7 +37,7 @@ const Messages = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     inputRef.current.focus();
-  });
+  }, [currentChannel, channelMessagesList]);
   const formik = useFormik({
     initialValues: {
       inputValue: '',
