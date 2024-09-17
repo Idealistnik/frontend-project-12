@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
@@ -20,6 +21,7 @@ import {
 import { getUserInfo } from '../../slices/userSlice';
 
 const RemoveChannelModal = () => {
+  const [isSubmitting, setSubmitting] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isPressedRemoveChannel = useSelector(getPressedRemoveChannel);
@@ -34,6 +36,7 @@ const RemoveChannelModal = () => {
 
   const handleRemoveChannel = async (id) => {
     try {
+      setSubmitting(true);
       const response = await axios.delete(routes.editChannel(id), {
         headers: {
           Authorization: `Bearer ${currentToken}`,
@@ -45,7 +48,9 @@ const RemoveChannelModal = () => {
       dispatch(setChannelToRemove(null));
       dispatch(setPressedRemoveChannel(false));
       toast.success(t('channels.removed'));
+      setSubmitting(false);
     } catch (e) {
+      setSubmitting(false);
       if (e.message === 'Network Error') {
         toast.error(t('errors.network'));
         return;
@@ -60,7 +65,7 @@ const RemoveChannelModal = () => {
       onHide={handleClickCloseModal}
       centered
     >
-      <Modal.Header closeButton>
+      <Modal.Header closeButton={!isSubmitting}>
         <Modal.Title>{t('modals.remove')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -70,12 +75,14 @@ const RemoveChannelModal = () => {
             variant="secondary"
             onClick={handleClickCloseModal}
             className="me-2"
+            disabled={isSubmitting}
           >
             {t('modals.cancel')}
           </Button>
           <Button
             variant="danger"
             onClick={() => handleRemoveChannel(idToRemove)}
+            disabled={isSubmitting}
           >
             {t('modals.confirm')}
           </Button>

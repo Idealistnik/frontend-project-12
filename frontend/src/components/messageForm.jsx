@@ -1,6 +1,5 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import leoProfanity from 'leo-profanity';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 
 const MessageForm = ({ formik, inputRef, t }) => (
@@ -16,7 +15,6 @@ const MessageForm = ({ formik, inputRef, t }) => (
         name="inputValue"
         className="border-0 p-0 ps-2"
         required
-        id={leoProfanity.clean(formik.values.inputValue)}
         type="text"
         placeholder={t('chat.inputMessage')}
         onChange={formik.handleChange}

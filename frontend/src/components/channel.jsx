@@ -15,7 +15,7 @@ import {
 } from '../slices/uiSlice';
 
 const Channel = (
-  { channel, t },
+  { channel: { id, name, removable }, t },
 ) => {
   const dispatch = useDispatch();
   const currentChannelId = useSelector(getPressedChannelId);
@@ -32,22 +32,22 @@ const Channel = (
     dispatch(setChannelToRename(+currentId));
   };
   return (
-    <Nav.Item as="li" key={channel.id} className="w-100">
+    <Nav.Item as="li" key={id} className="w-100">
       <Dropdown as={ButtonGroup} className="d-flex">
         <Button
-          variant={currentChannelId === +channel.id ? 'secondary' : ''}
-          onClick={() => handleClick(channel.id)}
+          variant={currentChannelId === +id ? 'secondary' : ''}
+          onClick={() => handleClick(id)}
           className="w-100 rounded-0 text-start text-truncate"
         >
           <span className="me-1">#</span>
-          {channel.name}
+          {name}
         </Button>
 
-        {!channel.removable ? null : (
+        {!removable ? null : (
           <>
             <Dropdown.Toggle
               split
-              variant={currentChannelId === +channel.id ? 'secondary' : ''}
+              variant={currentChannelId === +id ? 'secondary' : ''}
               id="dropdown-split-basic"
               className="flex-grow-0"
             >
@@ -56,12 +56,12 @@ const Channel = (
 
             <Dropdown.Menu>
               <Dropdown.Item
-                onClick={() => handleRemoveChannel(channel.id)}
+                onClick={() => handleRemoveChannel(id)}
               >
                 {t('channels.remove')}
               </Dropdown.Item>
               <Dropdown.Item
-                onClick={() => handleRenameChannel(channel.id)}
+                onClick={() => handleRenameChannel(id)}
               >
                 {t('channels.rename')}
               </Dropdown.Item>
