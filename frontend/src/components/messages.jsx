@@ -16,7 +16,12 @@ import {
 } from '../slices/messagesSlice';
 import routes from '../routes/routes';
 import { channelsSelectors } from '../slices/channelSlice';
-import { getPressedChannelId } from '../slices/uiSlice';
+import {
+  getPressedChannelId,
+  getPressedAddChannel,
+  getPressedRemoveChannel,
+  getPressedRenameChannel,
+} from '../slices/uiSlice';
 import MessageForm from './messageForm';
 
 const Messages = () => {
@@ -24,6 +29,9 @@ const Messages = () => {
   const isLoggedIn = useSelector(selectorLoggedIn);
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentChannelId = useSelector(getPressedChannelId);
+  const isPressedAddChannel = useSelector(getPressedAddChannel);
+  const isPressedRemoveChannel = useSelector(getPressedRemoveChannel);
+  const isPressedRenameChannel = useSelector(getPressedRenameChannel);
   // const channels = useSelector(channelsSelectors.selectAll);
   const currentChannel = useSelector((state) => channelsSelectors
     .selectById(state, currentChannelId));
@@ -103,7 +111,9 @@ const Messages = () => {
           <MessageForm
             formik={formik}
             channelMessagesList={channelMessagesList}
-            // currentChannelId={currentChannelId}
+            isPressedAddChannel={isPressedAddChannel}
+            isPressedRemoveChannel={isPressedRemoveChannel}
+            isPressedRenameChannel={isPressedRenameChannel}
             t={t}
           />
         </div>

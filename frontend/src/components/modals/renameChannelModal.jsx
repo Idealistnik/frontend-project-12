@@ -85,15 +85,10 @@ const RenameChannelModal = () => {
   });
 
   useEffect(() => {
-    const getSelected = () => {
-      setTimeout(() => {
-        if (isPressedRenameChannel) {
-          inputRenameRef.current.select();
-          inputRenameRef.current.focus();
-        }
-      });
-    };
-    getSelected();
+    if (inputRenameRef.current) {
+      inputRenameRef.current.select();
+      inputRenameRef.current.focus();
+    }
   }, [isPressedRenameChannel]);
 
   return (

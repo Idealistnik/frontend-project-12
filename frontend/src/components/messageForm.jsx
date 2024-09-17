@@ -6,8 +6,10 @@ import { ArrowRightSquare } from 'react-bootstrap-icons';
 const MessageForm = (
   {
     formik,
-    // currentChannelId,
     channelMessagesList,
+    isPressedAddChannel,
+    isPressedRemoveChannel,
+    isPressedRenameChannel,
     t,
   },
 ) => {
@@ -16,7 +18,7 @@ const MessageForm = (
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [channelMessagesList]);
+  }, [channelMessagesList, isPressedAddChannel, isPressedRemoveChannel, isPressedRenameChannel]);
   return (
     <Form
       className="py-1 border rounded-2"

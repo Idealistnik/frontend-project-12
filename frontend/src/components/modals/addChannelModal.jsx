@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
 import { toast } from 'react-toastify';
@@ -19,6 +20,12 @@ import { getUserInfo } from '../../slices/userSlice';
 import { channelsSelectors, addChannel } from '../../slices/channelSlice';
 
 const AddChannelModal = () => {
+  const inputRef = useRef();
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  });
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isPressedAddChannel = useSelector(getPressedAddChannel);
@@ -78,7 +85,8 @@ const AddChannelModal = () => {
               type="text"
               name="inputValue"
               id="inputValue"
-              autoFocus
+              ref={inputRef}
+              // autoFocus
               required
               onChange={formik.handleChange}
               value={formik.values.inputValue}
