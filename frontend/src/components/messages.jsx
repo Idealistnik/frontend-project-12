@@ -3,7 +3,7 @@ import leoProfanity from 'leo-profanity';
 import { Spinner } from 'react-bootstrap';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { useFormik } from 'formik';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
@@ -33,11 +33,7 @@ const Messages = () => {
     .filter((message) => +message.channelId === currentChannelId);
   const messagesCount = _.size(channelMessagesList);
   const [currentToken, currentUser] = useSelector(getUserInfo);
-  const inputRef = useRef();
   const dispatch = useDispatch();
-  useEffect(() => {
-    inputRef.current.focus();
-  }, [currentChannel, channelMessagesList]);
   const formik = useFormik({
     initialValues: {
       inputValue: '',
@@ -63,9 +59,7 @@ const Messages = () => {
   });
 
   useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
-    }
+    dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
   }, [dispatch, currentToken, isLoggedIn]);
 
   return (
@@ -106,7 +100,12 @@ const Messages = () => {
           )}
         </div>
         <div className="mt-auto px-5 py-3">
-          <MessageForm formik={formik} inputRef={inputRef} t={t} />
+          <MessageForm
+            formik={formik}
+            channelMessagesList={channelMessagesList}
+            // currentChannelId={currentChannelId}
+            t={t}
+          />
         </div>
       </div>
     </div>
