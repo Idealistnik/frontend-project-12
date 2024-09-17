@@ -84,12 +84,24 @@ const RenameChannelModal = () => {
     },
   });
 
+  // useEffect(() => {
+  //   const getSelected = () => {
+  //     setTimeout(() => {
+  //       if (inputRenameRef.current) {
+  //         inputRenameRef.current.select();
+  //         inputRenameRef.current.focus();
+  //       }
+  //     });
+  //   };
+  //   getSelected();
+  // }, [isPressedRenameChannel]);
+
   useEffect(() => {
-    if (inputRenameRef.current) {
-      inputRenameRef.current.select();
+    if (isPressedRenameChannel && inputRenameRef.current) {
       inputRenameRef.current.focus();
+      inputRenameRef.current.select();
     }
-  }, [isPressedRenameChannel]);
+  }, [isPressedRenameChannel, inputRenameRef.current]);
 
   return (
     <Modal
@@ -112,7 +124,6 @@ const RenameChannelModal = () => {
               type="text"
               name="inputValue"
               id="inputValue"
-              autoFocus
               required
               value={formik.values.inputValue}
               onChange={formik.handleChange}
@@ -131,7 +142,7 @@ const RenameChannelModal = () => {
               <Button variant="secondary" className="me-2" onClick={handleClickCloseModal} disabled={formik.isSubmitting}>
                 {t('modals.cancel')}
               </Button>
-              <Button variant="primary" type="submit" onClick={formik.handleSubmit} disabled={formik.isSubmitting}>
+              <Button variant="primary" type="submit" disabled={formik.isSubmitting}>
                 {t('modals.submit')}
               </Button>
             </div>

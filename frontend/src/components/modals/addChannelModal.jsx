@@ -110,7 +110,6 @@ const AddChannelModal = () => {
               <Button
                 type="submit"
                 variant="primary"
-                onClick={formik.handleSubmit}
                 disabled={formik.isSubmitting}
               >
                 {t('modals.submit')}

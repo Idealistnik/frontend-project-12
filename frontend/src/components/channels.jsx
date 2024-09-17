@@ -22,17 +22,15 @@ const Channels = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      const getChannels = async () => {
-        const response = await axios.get(routes.channels(), {
-          headers: {
-            Authorization: `Bearer ${currentToken}`,
-          },
-        });
-        return response.data;
-      };
-      getChannels().then((data) => dispatch(setChannels(data)));
-    }
+    const getChannels = async () => {
+      const response = await axios.get(routes.channels(), {
+        headers: {
+          Authorization: `Bearer ${currentToken}`,
+        },
+      });
+      return response.data;
+    };
+    getChannels().then((data) => dispatch(setChannels(data)));
   }, [dispatch, currentToken, isLoggedIn]);
 
   const handleClickAddChannel = () => {
