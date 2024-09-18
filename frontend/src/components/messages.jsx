@@ -1,20 +1,19 @@
 import { useTranslation } from 'react-i18next';
-import leoProfanity from 'leo-profanity';
+// import leoProfanity from 'leo-profanity';
 import { Spinner } from 'react-bootstrap';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import { useFormik } from 'formik';
+// import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+// import axios from 'axios';
 import _ from 'lodash';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
 import {
   setMessages,
   messagesSelectors,
-  addMessage,
   fetchMessages,
 } from '../slices/messagesSlice';
-import routes from '../routes/routes';
+// import routes from '../routes/routes';
 import { channelsSelectors } from '../slices/channelSlice';
 import {
   getPressedChannelId,
@@ -32,7 +31,6 @@ const Messages = () => {
   const isPressedAddChannel = useSelector(getPressedAddChannel);
   const isPressedRemoveChannel = useSelector(getPressedRemoveChannel);
   const isPressedRenameChannel = useSelector(getPressedRenameChannel);
-  // const channels = useSelector(channelsSelectors.selectAll);
   const currentChannel = useSelector((state) => channelsSelectors
     .selectById(state, currentChannelId));
   const currentChannelName = currentChannel?.name;
@@ -42,29 +40,6 @@ const Messages = () => {
   const messagesCount = _.size(channelMessagesList);
   const [currentToken, currentUser] = useSelector(getUserInfo);
   const dispatch = useDispatch();
-  const formik = useFormik({
-    initialValues: {
-      inputValue: '',
-    },
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        const newMessage = {
-          body: leoProfanity.clean(values.inputValue),
-          channelId: currentChannelId,
-          username: currentUser,
-        };
-        const response = await axios.post(routes.messages(), newMessage, {
-          headers: {
-            Authorization: `Bearer ${currentToken}`,
-          },
-        });
-        resetForm();
-        dispatch(addMessage(response.data));
-      } catch (error) {
-        console.error(error);
-      }
-    },
-  });
 
   useEffect(() => {
     dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
@@ -109,7 +84,9 @@ const Messages = () => {
         </div>
         <div className="mt-auto px-5 py-3">
           <MessageForm
-            formik={formik}
+            currentToken={currentToken}
+            currentChannelId={currentChannelId}
+            currentUser={currentUser}
             channelMessagesList={channelMessagesList}
             isPressedAddChannel={isPressedAddChannel}
             isPressedRemoveChannel={isPressedRemoveChannel}

@@ -1,18 +1,51 @@
 import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import leoProfanity from 'leo-profanity';
 import Button from 'react-bootstrap/Button';
+import { useFormik } from 'formik';
+import axios from 'axios';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
+import routes from '../routes/routes';
+import { addMessage } from '../slices/messagesSlice';
 
 const MessageForm = (
   {
-    formik,
+    currentUser,
     channelMessagesList,
     isPressedAddChannel,
     isPressedRemoveChannel,
     isPressedRenameChannel,
+    currentChannelId,
+    currentToken,
     t,
   },
 ) => {
+  const dispatch = useDispatch();
+  const formik = useFormik({
+    initialValues: {
+      inputValue: '',
+    },
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const newMessage = {
+          body: leoProfanity.clean(values.inputValue),
+          channelId: currentChannelId,
+          username: currentUser,
+        };
+        const response = await axios.post(routes.messages(), newMessage, {
+          headers: {
+            Authorization: `Bearer ${currentToken}`,
+          },
+        });
+        resetForm();
+        dispatch(addMessage(response.data));
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
   const inputRef = useRef();
   useEffect(() => {
     if (inputRef.current) {
