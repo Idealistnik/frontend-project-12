@@ -97,14 +97,6 @@ const RenameChannelModal = () => {
     getSelected();
   }, [isPressedRenameChannel]);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (inputRenameRef.current) {
-  //       inputRenameRef.current.select();
-  //     }
-  //   });
-  // }, []);
-
   return (
     <Modal
       show={isPressedRenameChannel}
