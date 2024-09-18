@@ -86,24 +86,24 @@ const RenameChannelModal = () => {
     },
   });
 
-  // useEffect(() => {
-  //   const getSelected = () => {
-  //     setTimeout(() => {
-  //       if (inputRenameRef.current) {
-  //         inputRenameRef.current.select();
-  //         inputRenameRef.current.focus();
-  //       }
-  //     });
-  //   };
-  //   getSelected();
-  // }, [isPressedRenameChannel]);
-
   useEffect(() => {
-    if (isPressedRenameChannel && inputRenameRef.current) {
-      inputRenameRef.current.focus();
-      inputRenameRef.current.select();
-    }
-  }, [isPressedRenameChannel, inputRenameRef.current]);
+    const getSelected = () => {
+      setTimeout(() => {
+        if (inputRenameRef.current) {
+          inputRenameRef.current.select();
+        }
+      });
+    };
+    getSelected();
+  }, [isPressedRenameChannel]);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (inputRenameRef.current) {
+  //       inputRenameRef.current.select();
+  //     }
+  //   });
+  // }, []);
 
   return (
     <Modal
