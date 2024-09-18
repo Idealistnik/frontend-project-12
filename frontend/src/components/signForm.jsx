@@ -1,18 +1,20 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Spinner } from 'react-bootstrap';
+
 import { useFormik } from 'formik';
-import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import setLocale from '../validation/validation';
+
 import {
   fetchSignIn,
   selectorError,
 } from '../slices/userSlice';
+import setLocale from '../validation/validation';
 import routes from '../routes/routes';
 
 const SignForm = () => {
@@ -30,6 +32,7 @@ const SignForm = () => {
       .required()
       .oneOf([yup.ref('password'), null]),
   });
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -44,6 +47,7 @@ const SignForm = () => {
       navigate(routes.mainPage());
     },
   });
+
   useEffect(() => {
     if (error) {
       if (error === 'Network Error') {

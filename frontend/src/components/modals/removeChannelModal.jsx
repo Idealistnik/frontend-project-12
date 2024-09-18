@@ -1,24 +1,24 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
+import axios from 'axios';
 
 import {
   setPressedRemoveChannel,
   getPressedRemoveChannel,
   setPressedChannel,
 } from '../../slices/uiSlice';
-import routes from '../../routes/routes';
 import {
   removeChannel,
   getChannelIdToRemove,
   setChannelToRemove,
 } from '../../slices/channelSlice';
 import { getUserInfo } from '../../slices/userSlice';
+import routes from '../../routes/routes';
 
 const RemoveChannelModal = () => {
   const [isSubmitting, setSubmitting] = useState(false);

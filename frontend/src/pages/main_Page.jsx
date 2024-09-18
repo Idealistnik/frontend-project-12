@@ -1,5 +1,5 @@
-import Header from '../components/header';
 import BodyContainer from '../components/bodyContainer';
+import Header from '../components/header';
 import Channels from '../components/channels';
 import Messages from '../components/messages';
 import AddChannelModal from '../components/modals/addChannelModal';

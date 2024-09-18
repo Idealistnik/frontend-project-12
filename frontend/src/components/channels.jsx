@@ -1,17 +1,19 @@
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { PlusSquare } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
+
+import axios from 'axios';
+
 import {
   setChannels,
   channelsSelectors,
 } from '../slices/channelSlice';
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
-import routes from '../routes/routes';
 import { setPressedAddChannel } from '../slices/uiSlice';
+import routes from '../routes/routes';
 import Channel from './channel';
 
 const Channels = () => {

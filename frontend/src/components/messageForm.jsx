@@ -1,13 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import leoProfanity from 'leo-profanity';
 import Button from 'react-bootstrap/Button';
+import { ArrowRightSquare } from 'react-bootstrap-icons';
+import { toast } from 'react-toastify';
+
+import leoProfanity from 'leo-profanity';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { ArrowRightSquare } from 'react-bootstrap-icons';
-import routes from '../routes/routes';
+
 import { addMessage } from '../slices/messagesSlice';
+import routes from '../routes/routes';
 
 const MessageForm = (
   {
@@ -22,6 +25,14 @@ const MessageForm = (
   },
 ) => {
   const dispatch = useDispatch();
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [channelMessagesList, isPressedAddChannel, isPressedRemoveChannel, isPressedRenameChannel]);
+
   const formik = useFormik({
     initialValues: {
       inputValue: '',
@@ -40,18 +51,16 @@ const MessageForm = (
         });
         resetForm();
         dispatch(addMessage(response.data));
-      } catch (error) {
-        console.error(error);
+      } catch (e) {
+        if (e.message === 'Network Error') {
+          toast.error(t('errors.network'));
+          return;
+        }
+        toast.error(t('errors.unknown'));
       }
     },
   });
 
-  const inputRef = useRef();
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [channelMessagesList, isPressedAddChannel, isPressedRemoveChannel, isPressedRenameChannel]);
   return (
     <Form
       className="py-1 border rounded-2"

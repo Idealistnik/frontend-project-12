@@ -1,19 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+
+import axios from 'axios';
 import { useFormik } from 'formik';
+
 import {
   setPressedRenameChannel,
   getPressedRenameChannel,
 } from '../../slices/uiSlice';
-import setLocale, { getSchemaChannels } from '../../validation/validation';
-import routes from '../../routes/routes';
 import {
   renameChannel,
   getChannelIdToRename,
@@ -21,10 +20,12 @@ import {
   channelsSelectors,
 } from '../../slices/channelSlice';
 import { getUserInfo } from '../../slices/userSlice';
+import setLocale, { getSchemaChannels } from '../../validation/validation';
+import routes from '../../routes/routes';
 
 const RenameChannelModal = () => {
   const { t } = useTranslation();
-  const inputRenameRef = useRef();
+  const inputRenameRef = useRef(null);
   const dispatch = useDispatch();
   const isPressedRenameChannel = useSelector(getPressedRenameChannel);
   const idToRename = useSelector(getChannelIdToRename);
@@ -45,6 +46,7 @@ const RenameChannelModal = () => {
   };
   setLocale(t);
   const schema = getSchemaChannels(channelsNames);
+
   const formik = useFormik({
     initialValues: {
       inputValue: channelName,
@@ -146,9 +148,7 @@ const RenameChannelModal = () => {
                 {t('modals.submit')}
               </Button>
             </div>
-
           </Form.Group>
-
         </Form>
       </Modal.Body>
     </Modal>

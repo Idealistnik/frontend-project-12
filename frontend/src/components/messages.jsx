@@ -1,18 +1,16 @@
-import { useTranslation } from 'react-i18next';
-// import leoProfanity from 'leo-profanity';
-import { Spinner } from 'react-bootstrap';
-// import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import { Spinner } from 'react-bootstrap';
+
 import _ from 'lodash';
+
 import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
 import {
   setMessages,
   messagesSelectors,
   fetchMessages,
 } from '../slices/messagesSlice';
-// import routes from '../routes/routes';
 import { channelsSelectors } from '../slices/channelSlice';
 import {
   getPressedChannelId,
@@ -39,13 +37,13 @@ const Messages = () => {
   const messagesCount = _.size(channelMessagesList);
   const [currentToken, currentUser] = useSelector(getUserInfo);
   const dispatch = useDispatch();
+
   const endMessageRef = useRef(null);
   useEffect(() => {
     if (endMessageRef.current) {
       endMessageRef.current.scrollTop = endMessageRef.current.scrollHeight;
     }
   }, [currentChannel, channelMessagesList]);
-
   useEffect(() => {
     dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
   }, [dispatch, currentToken, isLoggedIn]);

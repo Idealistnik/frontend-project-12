@@ -1,9 +1,10 @@
 import { Provider } from 'react-redux';
 import i18next from 'i18next';
-import leoProfanity from 'leo-profanity';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
+
+import leoProfanity from 'leo-profanity';
 import io from 'socket.io-client';
-import App from './App';
+
 import { addMessage } from './slices/messagesSlice';
 import {
   addChannel,
@@ -11,6 +12,7 @@ import {
   renameChannel,
 } from './slices/channelSlice';
 import resources from './locales/index';
+import App from './App';
 import store from './slices/index';
 
 const englishWords = leoProfanity.getDictionary('en');

@@ -1,16 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import leoProfanity from 'leo-profanity';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+
 import { useFormik } from 'formik';
 import axios from 'axios';
-import setLocale, { getSchemaChannels } from '../../validation/validation';
-import routes from '../../routes/routes';
+import leoProfanity from 'leo-profanity';
+
 import {
   getPressedAddChannel,
   setPressedAddChannel,
@@ -18,14 +17,17 @@ import {
 } from '../../slices/uiSlice';
 import { getUserInfo } from '../../slices/userSlice';
 import { channelsSelectors, addChannel } from '../../slices/channelSlice';
+import setLocale, { getSchemaChannels } from '../../validation/validation';
+import routes from '../../routes/routes';
 
 const AddChannelModal = () => {
-  const inputRef = useRef();
+  const inputRef = useRef(null);
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
   });
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isPressedAddChannel = useSelector(getPressedAddChannel);
@@ -36,8 +38,10 @@ const AddChannelModal = () => {
     dispatch(setPressedAddChannel(false));
     resetForm();
   };
+
   setLocale(t);
   const schema = getSchemaChannels(channelsNames);
+
   const formik = useFormik({
     initialValues: {
       inputValue: '',
@@ -86,7 +90,6 @@ const AddChannelModal = () => {
               name="inputValue"
               id="inputValue"
               ref={inputRef}
-              // autoFocus
               required
               onChange={formik.handleChange}
               value={formik.values.inputValue}

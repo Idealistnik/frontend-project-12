@@ -1,9 +1,10 @@
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { useSelector, useDispatch } from 'react-redux';
+import Container from 'react-bootstrap/Container';
+
 import {
   selectorLoggedIn,
   setLoggedOut,

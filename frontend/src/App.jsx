@@ -1,7 +1,5 @@
-import './App.css';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
 import {
   BrowserRouter,
   Routes,
@@ -9,6 +7,11 @@ import {
   Navigate,
 }
   from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import './App.css';
+
 import LoginPage from './pages/login_Page';
 import Page404 from './pages/404_Page';
 import MainPage from './pages/main_Page';
