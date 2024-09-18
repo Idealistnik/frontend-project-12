@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 // import leoProfanity from 'leo-profanity';
 import { Spinner } from 'react-bootstrap';
-import ScrollToBottom from 'react-scroll-to-bottom';
 // import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import axios from 'axios';
 import _ from 'lodash';
@@ -40,6 +39,12 @@ const Messages = () => {
   const messagesCount = _.size(channelMessagesList);
   const [currentToken, currentUser] = useSelector(getUserInfo);
   const dispatch = useDispatch();
+  const endMessageRef = useRef(null);
+  useEffect(() => {
+    if (endMessageRef.current) {
+      endMessageRef.current.scrollTop = endMessageRef.current.scrollHeight;
+    }
+  }, [currentChannel, channelMessagesList]);
 
   useEffect(() => {
     dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
@@ -60,6 +65,7 @@ const Messages = () => {
         <div
           id="messages-box"
           className="chat-messages overflow-auto px-5"
+          ref={endMessageRef}
         >
           {isLoading === 'loading' ? (
             <div
@@ -71,15 +77,13 @@ const Messages = () => {
               </Spinner>
             </div>
           ) : (
-            <ScrollToBottom className="h-100">
-              {channelMessagesList.map(({ body, username, id }) => (
-                <div key={id} className="text-break mb-2">
-                  <b>{username}</b>
-                  :&nbsp;
-                  {body}
-                </div>
-              ))}
-            </ScrollToBottom>
+            channelMessagesList.map(({ body, username, id }) => (
+              <div key={id} className="text-break mb-2">
+                <b>{username}</b>
+                :&nbsp;
+                {body}
+              </div>
+            ))
           )}
         </div>
         <div className="mt-auto px-5 py-3">
