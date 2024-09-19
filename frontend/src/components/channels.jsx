@@ -11,14 +11,13 @@ import {
   setChannels,
   channelsSelectors,
 } from '../slices/channelSlice';
-import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
+import { getUserInfo } from '../slices/userSlice';
 import { setPressedAddChannel } from '../slices/uiSlice';
 import routes from '../routes/routes';
 import Channel from './channel';
 
 const Channels = () => {
   const { t } = useTranslation();
-  const isLoggedIn = useSelector(selectorLoggedIn);
   const channelList = useSelector(channelsSelectors.selectAll);
   const [currentToken] = useSelector(getUserInfo);
   const dispatch = useDispatch();
@@ -33,7 +32,7 @@ const Channels = () => {
       return response.data;
     };
     getChannels().then((data) => dispatch(setChannels(data)));
-  }, [dispatch, currentToken, isLoggedIn]);
+  }, [dispatch, currentToken]);
 
   const handleClickAddChannel = () => {
     dispatch(setPressedAddChannel(true));
