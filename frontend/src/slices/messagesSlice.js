@@ -23,10 +23,7 @@ const initialState = messagesAdapter.getInitialState({ loadingStatus: 'idle', er
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
-  reducers: {
-    addMessage: messagesAdapter.addOne,
-    setMessages: messagesAdapter.addMany,
-  },
+  reducers: { addMessage: messagesAdapter.addOne },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMessages.pending, (state) => {
@@ -51,9 +48,6 @@ const messagesSlice = createSlice({
   },
 });
 
-export const {
-  addMessage,
-  setMessages,
-} = messagesSlice.actions;
+export const { addMessage } = messagesSlice.actions;
 export const messagesSelectors = messagesAdapter.getSelectors((state) => state.messages);
 export default messagesSlice;

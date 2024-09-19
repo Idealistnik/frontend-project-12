@@ -5,9 +5,8 @@ import { Spinner } from 'react-bootstrap';
 
 import _ from 'lodash';
 
-import { getUserInfo, selectorLoggedIn } from '../slices/userSlice';
+import { getUserInfo } from '../slices/userSlice';
 import {
-  setMessages,
   messagesSelectors,
   fetchMessages,
 } from '../slices/messagesSlice';
@@ -22,7 +21,6 @@ import MessageForm from './messageForm';
 
 const Messages = () => {
   const { t } = useTranslation();
-  const isLoggedIn = useSelector(selectorLoggedIn);
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentChannelId = useSelector(getPressedChannelId);
   const isPressedAddChannel = useSelector(getPressedAddChannel);
@@ -45,8 +43,8 @@ const Messages = () => {
     }
   }, [currentChannel, channelMessagesList]);
   useEffect(() => {
-    dispatch(fetchMessages(currentToken)).then((data) => dispatch(setMessages(data)));
-  }, [dispatch, currentToken, isLoggedIn]);
+    dispatch(fetchMessages(currentToken));
+  }, [dispatch, currentToken]);
 
   return (
     <div className="col p-0 h-100">
